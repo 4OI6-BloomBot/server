@@ -1,3 +1,26 @@
 from django.db import models
 
-# Create your models here.
+# =============================
+# Device tracking model
+# =============================
+class Device(models.Model):
+    name   = models.CharField(max_length = 100)
+    hwID   = models.CharField(max_length = 50)
+    # config = models.ForeignKey(Config, on_delete=models.SET_NULL)
+    # fleet  = models.ForeignKey(Fleet,  on_delete=models.SET_NULL)
+
+    # Override to string method to return the given name
+    def __str__(self):
+        return self.name
+
+# ===============================
+# Device configuration tracking
+# ===============================
+# class Config():
+
+
+# =============================
+# Grouping system for devices
+# =============================
+# class Fleet():
+    # name = models.CharField(max_length = 100) 
