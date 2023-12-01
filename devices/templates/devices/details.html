@@ -9,9 +9,9 @@
 {% block content %}
     <p>Edit {{ device.name }}</p>
     
-    <form action = "{% url 'devices:edit' device.id %}"   
-          method = "post"
-          class  = "mb-3"
+    <form 
+      action = "{% url 'devices:edit' device.id %}"   
+      method = "post"
     >
         {% csrf_token %}
 
@@ -23,18 +23,23 @@
             type  = "text"
             name  = "name"
             value = "{{ device.name }}"
+            class = "form-control"
           >
 
-          <label for="hwID">Hardware ID:</label>
+          <label for="hwID" class="form-label">Hardware ID:</label>
           <input 
             type  = "text"
             name  = "hwID"
             value = "{{ device.hwID }}"
+            class = "form-control"
             readonly
           >
 
         </fieldset>
 
-        <input type="submit">
+        <input 
+          type  = "submit"
+          class = "btn btn-primary"
+        >
     </form>
 {% endblock %}
