@@ -1,5 +1,6 @@
 from django.shortcuts import loader, render, get_object_or_404
 from django.http      import HttpResponse, Http404
+from django.views     import generic
 
 # Add model import
 from .models import Device
@@ -7,22 +8,20 @@ from .models import Device
 # ==========================================
 # Root of app. Fetch a list of all devices
 # ==========================================
-def index(request):
-    device_list = Device.objects.order_by("name")[:5]
-    
-    # Create template and pass data to it
-    template = loader.get_template("devices/index.html")
-    context  = {
-        "device_list" : device_list
-    }
+class IndexView(generic.ListView):
+    template_name       = "devices/index.html"
+    context_object_name = "device_list"
 
-    return HttpResponse(template.render(context, request))
+    def get_queryset(self):
+        return Device.objects.order_by('name')[:5]
 
 
 # ==========================================
 # Get the details of a device givin its ID
 # ==========================================
-def fetchDevice(request, id):
-    device = get_object_or_404(Device, pk=id)
+class DetailView(generic.DetailView):
+    template_name = "devices/details.html"
+    model         = Device
 
-    return render(request, "devices/details.html", { "device" : device })
+
+    
