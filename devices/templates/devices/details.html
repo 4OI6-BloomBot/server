@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% comment %}
+    Displays the details of a given device
+    TODO: Can probably abstract the list part of the template and extend it for
+          each list component in the project
+{% endcomment %}
+
+{% block content %}
+    About {{ device.name }}
+{% endblock %}

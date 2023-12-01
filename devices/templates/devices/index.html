@@ -10,7 +10,7 @@
     {% if device_list %}
         <ul>
         {% for device in device_list %}
-            <li><a href="/devices/{{ device.id }}/">{{ device.name }}</a></li>
+            <li><a href="{% url 'devices:detail' device.id %}">{{ device.name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

@@ -1,10 +1,12 @@
-from django.shortcuts import loader
-from django.http      import HttpResponse
+from django.shortcuts import loader, render, get_object_or_404
+from django.http      import HttpResponse, Http404
 
 # Add model import
 from .models import Device
 
-
+# ==========================================
+# Root of app. Fetch a list of all devices
+# ==========================================
 def index(request):
     device_list = Device.objects.order_by("name")[:5]
     
@@ -15,3 +17,12 @@ def index(request):
     }
 
     return HttpResponse(template.render(context, request))
+
+
+# ==========================================
+# Get the details of a device givin its ID
+# ==========================================
+def fetchDevice(request, id):
+    device = get_object_or_404(Device, pk=id)
+
+    return render(request, "devices/details.html", { "device" : device })
