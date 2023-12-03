@@ -8,14 +8,46 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>BloomBot - {{page_title|title}}</title>
+        <title>BloomBot - {{page_title|title}}</title>  
     
         {% comment %} Bootstrap CSS import {% endcomment %}
         <link href="{% static './bootstrap-5.3.2-dist/css/bootstrap.css' %}" rel="stylesheet">
     </head>
 
     <body>
-      {% block content %}{% endblock content %}
+      {% comment %}
+        Navbar
+      {% endcomment %}
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          
+          {% comment %} Branding (title in corner) {% endcomment %}
+          <a class="navbar-brand" href="#">BloomBot</a>
+
+          {% comment %} 
+            Button for overflow once minimum screen size is hit
+          {% endcomment %}
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          {% comment %} 
+            Collapsable section once minimum screen size is hit
+          {% endcomment %}
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'devices:index' %}">Devices</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+      {% block    content %}
+      {% endblock content %}
+    
     </body>
 
     {% comment %} Bootstrap JS Import {% endcomment %}
