@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     
     # Custom apps
     'devices.apps.DevicesConfig',
+    'sensor_data.apps.SensorDataConfig'
 ]
 
 MIDDLEWARE = [
