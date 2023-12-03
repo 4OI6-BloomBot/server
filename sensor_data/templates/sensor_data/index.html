@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% comment %}
-    Template for displaying a list of the current devices
+    Template for displaying a table of measurements
     TODO: Can probably abstract the list part of the template and extend it for
           each list component in the project
 {% endcomment %}
@@ -13,6 +13,7 @@
             <thead>
                 <tr>
                     <th scope="col">Device</th>
+                    <th scope="col">Sensor Type</th>
                     <th scope="col">Value</th>
                     <th scope="col">Timestamp</th>
                 </tr>
@@ -20,7 +21,8 @@
       
             {% for measurement in measurement_list %}
                 <tr>
-                    <th>{{ measurement.device.name }}</th>
+                    <td>{{ measurement.device.name }}</td>
+                    <td>{{ measurement.sensor.name }}</td>
                     <td>{{ measurement.value }} {{ measurement.sensor.unit }}</td>
                     <td>{{ measurement.datetime }}</td>
                 </tr>
