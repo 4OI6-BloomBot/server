@@ -12,6 +12,13 @@
     
         {% comment %} Bootstrap CSS import {% endcomment %}
         <link href="{% static './bootstrap-5.3.2-dist/css/bootstrap.css' %}" rel="stylesheet">
+    
+        {% comment %} 
+          Datatables for enhanced HTML tables 
+          TODO: Should really only load this on pages that actually need it.
+        {% endcomment %}
+        <link href="{% static './DataTables/datatables.min.css' %}" rel="stylesheet">
+
     </head>
 
     <body>
@@ -53,4 +60,7 @@
     {% comment %} Bootstrap JS Import {% endcomment %}
     <script src="{% static './bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js' %}"></script>
 
+    {% comment %} Datatables JS import {% endcomment %}
+    <script src="{% static './jQuery/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static './DataTables/datatables.min.js' %}"></script>
 </html>  
