@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% comment %}
+    Template for displaying a table of measurements
+    TODO: Can probably abstract the list part of the template and extend it for
+          each list component in the project
+{% endcomment %}
+
+{% block content %}
+    {% if measurement_list %}
+        <table id="measurement_table" class="table">
+            {% comment %} Table headers {% endcomment %}
+            <thead>
+                <tr>
+                    <th scope="col">Device</th>
+                    <th scope="col">Sensor Type</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Timestamp</th>
+                </tr>
+            </thead>
+      
+            {% for measurement in measurement_list %}
+                <tr>
+                    <td>{{ measurement.device.name }}</td>
+                    <td>{{ measurement.sensor.name }}</td>
+                    <td>{{ measurement.value }} {{ measurement.sensor.unit }}</td>
+                    <td>{{ measurement.datetime }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No measurements are available.</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        new DataTable("#measurement_table");
+    </script>
+{% endblock %}
