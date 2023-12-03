@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% comment %}
+    Template for displaying a list of the current devices
+    TODO: Can probably abstract the list part of the template and extend it for
+          each list component in the project
+{% endcomment %}
+
+{% block content %}
+    {% if device_list %}
+        <ul>
+        {% for device in device_list %}
+            <li><a href="{% url 'devices:detail' device.id %}">{{ device.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No devices are available.</p>
+    {% endif %}
+{% endblock %}
