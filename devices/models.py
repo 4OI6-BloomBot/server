@@ -4,8 +4,13 @@ from django.db import models
 # Device tracking model
 # =============================
 class Device(models.Model):
-    name   = models.CharField(max_length = 100)
-    hwID   = models.CharField(max_length = 50)
+    name     = models.CharField(max_length = 100)
+    hwID     = models.CharField(max_length = 50)
+    lastSeen = models.DateTimeField(
+                auto_now     = False,
+                auto_now_add = True,
+                null         = True
+              )
     # config = models.ForeignKey(Config, on_delete=models.SET_NULL)
     # fleet  = models.ForeignKey(Fleet,  on_delete=models.SET_NULL)
 
