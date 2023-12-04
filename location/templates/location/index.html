@@ -8,6 +8,9 @@
 
 {% block content %}
     {% if location_list %}
+
+        <div id="map" style="height: 500px"></div>
+
         <table id="measurement_table" class="table">
             {% comment %} Table headers {% endcomment %}
             <thead>
@@ -37,5 +40,22 @@
 {% block js %}
     <script>
         new DataTable("#measurement_table");
+
+        {% comment %} Create map and add tiles {% endcomment %}
+        var map = L.map('map').setView([43.262071, -79.918834], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+
+        {% comment %} Iterate over locations and add to map {% endcomment %}
+        var marker;
+        {% for location in location_list %}
+            marker = L.marker([{{ location.latitude }}, {{ location.longitude }}]);
+            marker.bindPopup("{{ location.device.name }}");
+            marker.addTo(map);
+        {% endfor %}
     </script>
 {% endblock %}
