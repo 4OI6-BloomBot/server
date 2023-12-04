@@ -28,4 +28,4 @@ class Location(models.Model):
     
     # Override to string method to return the given name
     def __str__(self):
-        return self.device.name + "_" + self.datetime
+        return str(self.device.name) + "_" + str(self.datetime)
