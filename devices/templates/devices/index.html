@@ -24,7 +24,10 @@
                   <td>{{ device.name }}</td>
                   <td>{{ device.hwID }}</td>
                   <td>{{ device.lastSeen }}</td>
-                  <td><a href="{% url 'devices:detail' device.id %}"><button class="btn btn-sm btn-outline-primary">Edit</button></a></td>
+                  <td>
+                    <a href="{% url 'devices:detail'  device.id %}"><button class="btn btn-sm btn-outline-primary">Edit</button></a>
+                    <a href="{% url 'location:device' device.id %}"><button class="btn btn-sm btn-outline-secondary">Location</button></a>
+                  </td>
               </tr>
           {% endfor %}
         </table>
