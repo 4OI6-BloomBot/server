@@ -11,7 +11,7 @@ class IndexView(generic.ListView):
     context_object_name = "location_list"
 
     def get_queryset(self):
-        return Location.objects.order_by('datetime')[:5]
+        return Location.objects.order_by('device', '-datetime').distinct('device')
 
 
 # ==========================================
@@ -22,4 +22,4 @@ class DeviceView(generic.ListView):
     context_object_name = "location_list"
 
     def get_queryset(self):
-        return Location.objects.filter(pk = self.kwargs.get('pk')).order_by('datetime')[:5]
+        return Location.objects.filter(device = self.kwargs.get('pk')).order_by('datetime')
