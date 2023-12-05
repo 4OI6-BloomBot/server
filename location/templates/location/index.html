@@ -9,7 +9,7 @@
 {% block content %}
     {% if location_list %}
 
-        <div id="map" style="height: 500px"></div>
+        {% include "location/map.html" with location_list=location_list %}
 
         <table id="measurement_table" class="table">
             {% comment %} Table headers {% endcomment %}
@@ -39,45 +39,6 @@
 
 {% block js %}
     <script>
-        new DataTable("#measurement_table");
-
-        {% comment %} Create map and add tiles {% endcomment %}
-        var map = L.map('map').setView([43.262071, -79.918834], 13);
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom:      19,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-
-        {% comment %} Iterate over locations and add to map {% endcomment %}
-        var marker, position, circle, popup_text;
-        var line = [];
-        {% for location in location_list %}
-            position = [{{ location.latitude }}, {{ location.longitude }}];
-            
-            circle = L.circle(position, {
-              color:      'white',
-              fillColor:  'yellow',
-              fillOpacity: 0.5,
-              radius:      10     // TODO: Should be relative to accuracy
-            });
-
-            popup_text = "<a href='{% url 'devices:detail' location.device.id %}'>{{ location.device.name }}</a><br/>{{ location.datetime }}";
-            circle.bindPopup(popup_text);
-
-            circle.addTo(map);
-
-            line.push(position);
-        {% endfor %}
-
-        {% comment %} Add a pin for the last location {% endcomment %}
-          marker = L.marker(position);
-          marker.bindPopup(popup_text);
-          marker.addTo(map);
-
-        {% comment %} Add the path to map {% endcomment %}
-        L.polyline(line).addTo(map);
-
+        new DataTable("#measurement_table");        
     </script>
 {% endblock %}
