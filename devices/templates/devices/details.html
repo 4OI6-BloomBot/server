@@ -7,6 +7,13 @@
 {% endcomment %}
 
 {% block content %}
+    
+    {% comment %} Map showing the location history of the device {% endcomment %}
+    {% if device_location_list %}
+        {% include "location/map.html" with location_list=device_location_list connect_points=1 %}
+    {% endif %}
+
+
     <p>Edit {{ device.name }}</p>
     
     <form 

@@ -19,6 +19,13 @@
         {% endcomment %}
         <link href="{% static './DataTables/datatables.min.css' %}" rel="stylesheet">
 
+
+        {% comment %} 
+          Leaflet (maps)
+          TODO: Should really only load this on pages that actually need it.
+        {% endcomment %}
+        <link href="{% static './leaflet/leaflet.css' %}" rel="stylesheet"/>
+
     </head>
 
     <body>
@@ -69,4 +76,5 @@
 
     {% block    js %}
     {% endblock js %}
+
 </html>  
