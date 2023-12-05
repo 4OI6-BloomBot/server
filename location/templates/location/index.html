@@ -9,7 +9,7 @@
 {% block content %}
     {% if location_list %}
 
-        {% include "location/map.html" with location_list=location_list %}
+        {% include "location/map.html" with location_list=location_list all_pins=1 %}
 
         <table id="measurement_table" class="table">
             {% comment %} Table headers {% endcomment %}
