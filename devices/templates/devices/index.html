@@ -7,6 +7,12 @@
 {% endcomment %}
 
 {% block content %}
+
+    {% comment %} Map showing the location of each device {% endcomment %}
+    {% if device_location_list %}
+      {% include "location/map.html" with location_list=device_location_list all_pins=1 %}
+    {% endif %}
+
     {% if device_list %}
         <table id="devices_table" class="table">
           {% comment %} Table headers {% endcomment %}
@@ -25,8 +31,7 @@
                   <td>{{ device.hwID }}</td>
                   <td>{{ device.lastSeen }}</td>
                   <td>
-                    <a href="{% url 'devices:detail'  device.id %}"><button class="btn btn-sm btn-outline-primary">Edit</button></a>
-                    <a href="{% url 'location:device' device.id %}"><button class="btn btn-sm btn-outline-secondary">Location</button></a>
+                    <a href="{% url 'devices:detail'  device.id %}"><button class="btn btn-sm btn-outline-primary">Details</button></a>
                   </td>
               </tr>
           {% endfor %}
