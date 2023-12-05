@@ -37,6 +37,8 @@
           {% endfor %}
         </table>
         <ul>
+
+        <a href="{% url 'location:index' %}"><button class="btn btn-primary">All device history</button></a>
     {% else %}
         <p>No devices are available.</p>
     {% endif %}

@@ -12,7 +12,7 @@ class IndexView(generic.ListView):
     context_object_name = "device_location_list"
 
     def get_queryset(self):
-        data = Location.objects.order_by('device', '-datetime')
+        data = Location.objects.order_by('device', 'datetime')
 
         data_sorted = {}
         for location in data.all():
