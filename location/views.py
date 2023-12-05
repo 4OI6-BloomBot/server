@@ -9,10 +9,18 @@ from .models import Location
 # ==========================================
 class IndexView(generic.ListView):
     template_name       = "location/index.html"
-    context_object_name = "location_list"
+    context_object_name = "device_location_list"
 
     def get_queryset(self):
-        return Location.objects.order_by('device', '-datetime').distinct('device')
+        data = Location.objects.order_by('device', '-datetime')
+
+        data_sorted = {}
+        for location in data.all():
+            if location.device.id not in data_sorted:
+                data_sorted[location.device.id] = []
+            data_sorted[location.device.id].append(location)
+
+        return data_sorted
     
 
 # ======================================================
