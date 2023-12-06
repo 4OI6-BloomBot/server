@@ -11,6 +11,15 @@ class IndexView(generic.ListView):
     template_name       = "location/index.html"
     context_object_name = "device_location_list"
 
+    # Add the base template data
+    def get_context_data(self, *args, **kwargs):
+        context = super(IndexView, self).get_context_data(*args, **kwargs)
+
+        context['page_category'] = "device"
+        context['page_title']    = "Location History"
+
+        return context
+
     def get_queryset(self):
         data = Location.objects.order_by('device', 'datetime')
 

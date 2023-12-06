@@ -15,6 +15,7 @@ class IndexView(generic.ListView):
         context = super(generic.ListView, self).get_context_data(*args, **kwargs)
 
         context['page_category'] = "sensor_data"
+        context['page_title']    = "sensor data"
 
         return context
 

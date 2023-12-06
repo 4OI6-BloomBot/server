@@ -23,6 +23,7 @@ class IndexView(generic.ListView):
 
         # Add the page type for nav
         context['page_category'] = "device"
+        context['page_title']    = "devices"
 
         return context
 
@@ -42,8 +43,9 @@ class DetailView(generic.DetailView):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
         context['device_location_list'] = getDeviceLocations(self.kwargs['pk'])
 
-        # Add the page type for nav
+        # Add the page data for base template
         context['page_category'] = "device"
+        context['page_title']    = self.object.name
 
         return context
 
