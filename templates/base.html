@@ -47,13 +47,13 @@
                       </a>
                     </li>
                     <li>
-                      <a href="{% url 'devices:index' %}" class="nav-link text-white {% if page_category == 'device' %}active{% endif %}">
+                      <a href="{% url 'devices:index' %}" class="nav-link mt-1 text-white {% if page_category == 'device' %}active{% endif %}">
                         <i class="bi me-2 bi-cursor"></i>
                           Devices
                       </a>
                     </li>
                     <li>
-                        <a href="{% url 'sensor_data:index' %}" class="nav-link text-white {% if page_category == 'sensor_data' %}active{% endif %}">
+                        <a href="{% url 'sensor_data:index' %}" class="nav-link mt-1 text-white {% if page_category == 'sensor_data' %}active{% endif %}">
                             <i class="bi me-2 bi-clipboard-data"></i>
                             Sensor Data
                         </a>
@@ -68,6 +68,12 @@
         </div>
     
     </body>
+
+    <style>
+        .nav-pills .nav-link:hover {
+            background-color: #343a40;
+        }
+    </style>
 
     {% comment %} Bootstrap JS Import {% endcomment %}
     <script src="{% static './bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js' %}"></script>
