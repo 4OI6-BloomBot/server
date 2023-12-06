@@ -29,47 +29,64 @@
 
     </head>
 
-    <body style="overflow-x: hidden;">
+    <body>
+        <div class="container-fluid p-0">
+          <div class="row gx-0">
+      
         {% comment %}
           Navbar
         {% endcomment %}
-        <div class="row gx-0" style="height: 100vh;">
-            <nav class="col-2 p-3 text-white bg-dark">
+        <nav class="col-2 text-white bg-dark" style="height:100vh;">
+            <div class="p-3">
                 <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-4">BloomBot</span>
                 </a>
                 <hr/>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li>
-                      <a href="#" class="nav-link text-white">
-                          <i class="bi me-2 bi-speedometer2"></i>
-                          Dashboard
-                      </a>
+                        <a href="#" class="nav-link text-white">
+                            <i class="bi me-2 bi-speedometer2"></i> Dashboard
+                        </a>
                     </li>
                     <li>
-                      <a href="{% url 'devices:index' %}" class="nav-link mt-1 text-white {% if page_category == 'device' %}active{% endif %}">
-                        <i class="bi me-2 bi-cursor"></i>
-                          Devices
-                      </a>
+                        <a href="{% url 'devices:index' %}" class="nav-link mt-1 text-white {% if page_category == 'device' %}active{% endif %}">
+                            <i class="bi me-2 bi-cursor"></i> Devices
+                        </a>
                     </li>
                     <li>
                         <a href="{% url 'sensor_data:index' %}" class="nav-link mt-1 text-white {% if page_category == 'sensor_data' %}active{% endif %}">
-                            <i class="bi me-2 bi-clipboard-data"></i>
-                            Sensor Data
+                            <i class="bi me-2 bi-clipboard-data"></i> Sensor Data
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </div>
+        </nav>
 
-            <div class="col-10 p-0">
-                {% block    content %}
-                {% endblock content %}
+        {% comment %} 
+            Page content and title
+        {% endcomment %}
+        <div class="col-10">
+            <div class="container-fluid m-0 pt-4">
+                <div class="container-fluid ps-3 m-0">
+                    {% if page_title %}
+                        <div class="row gx-0 mb-3">
+                            <p class="text fs-2">{{ page_title|title }}</p>
+                        </div>
+                    {% endif %}
+                    {% block    content %}
+                    {% endblock content %}
+                </div>
             </div>
         </div>
-    
+      </div>
+      </div>
     </body>
 
     <style>
+        body {
+          background-color: #eeeeee;
+        }
+
         .nav-pills .nav-link:hover {
             background-color: #343a40;
         }

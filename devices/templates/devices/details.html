@@ -7,46 +7,56 @@
 {% endcomment %}
 
 {% block content %}
-    
-    {% comment %} Map showing the location history of the device {% endcomment %}
-    {% if device_location_list %}
-        {% include "location/map.html" with location_list=device_location_list connect_points=1 %}
-    {% endif %}
 
+    <div class="row">
+        <p class="text fs-2">Edit {{ device.name }}</p>
+    </div>
 
-    <p>Edit {{ device.name }}</p>
-    
-    <form 
-      action = "{% url 'devices:edit' device.id %}"   
-      method = "post"
-    >
-        {% csrf_token %}
-
-        <fieldset>
-          {% if error_message %}<p>{{ error_message }}</p>{% endif %}
-
-          <label for="name" class="form-label">Name:</label>
-          <input 
-            type  = "text"
-            name  = "name"
-            value = "{{ device.name }}"
-            class = "form-control"
-          >
-
-          <label for="hwID" class="form-label">Hardware ID:</label>
-          <input 
-            type  = "text"
-            name  = "hwID"
-            value = "{{ device.hwID }}"
-            class = "form-control"
-            readonly
-          >
-
-        </fieldset>
-
-        <input 
-          type  = "submit"
-          class = "btn btn-primary"
+    <div class="row gx-0">
+       
+        <form 
+          action = "{% url 'devices:edit' device.id %}"   
+          method = "post"
+          class  = "col-7 rounded bg-light mb-auto p-3"
         >
-    </form>
+            {% csrf_token %}
+
+            <fieldset>
+              {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+
+              <label for="name" class="form-label">Name:</label>
+              <input 
+                type  = "text"
+                name  = "name"
+                value = "{{ device.name }}"
+                class = "form-control"
+              >
+
+              <label for="hwID" class="form-label mt-3">Hardware ID:</label>
+              <input 
+                type  = "text"
+                name  = "hwID"
+                value = "{{ device.hwID }}"
+                class = "form-control"
+                readonly
+                disabled
+              >
+
+            </fieldset>
+
+            <input 
+              type  = "submit"
+              class = "btn btn-primary mt-5"
+              value = "Save"
+            >
+        </form>
+        
+
+        {% comment %} Map showing the location history of the device {% endcomment %}
+        {% if device_location_list %}
+          <div class="col-4 rounded mx-5 shadow-sm" style="height: 350px; overflow: hidden;">
+              {% include "location/map.html" with location_list=device_location_list connect_points=1 %}
+          </div>
+        {% endif %}
+    </div>
 {% endblock %}
