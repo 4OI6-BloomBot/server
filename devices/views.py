@@ -20,6 +20,10 @@ class IndexView(generic.ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
         context['device_location_list'] = getDeviceLocations()
+
+        # Add the page type for nav
+        context['page_category'] = "device"
+
         return context
 
     def get_queryset(self):
@@ -37,6 +41,10 @@ class DetailView(generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
         context['device_location_list'] = getDeviceLocations(self.kwargs['pk'])
+
+        # Add the page type for nav
+        context['page_category'] = "device"
+
         return context
 
 
