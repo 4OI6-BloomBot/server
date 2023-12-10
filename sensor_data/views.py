@@ -41,6 +41,7 @@ class SensorView(generic.ListView):
         context['page_title']    = Sensor.objects.get(pk = self.kwargs['pk']).name + " data"
 
         context['sensor_list'] = getSensors()
+        context['device_list'] = Measurement.objects.filter(sensor = self.kwargs['pk']).distinct('device')
 
         return context
 
