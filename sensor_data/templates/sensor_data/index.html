@@ -32,6 +32,11 @@
         <p>No measurements are available.</p>
     {% endif %}
 
+    {% if sensor_list %}
+        {% for sensor in sensor_list %}
+            <a href="{% url 'sensor_data:sensor' sensor.pk %}"><button class="btn btn-primary">{{ sensor.name }}</button></a>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block js %}
