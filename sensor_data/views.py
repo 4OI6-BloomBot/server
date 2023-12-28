@@ -1,7 +1,7 @@
-from django.views     import generic
-
-# Add model import
-from .models import Measurement, Sensor
+from rest_framework import viewsets
+from django.views   import generic
+from .models        import Measurement, Sensor
+from .serializers   import MeasurementSerializer
 
 # ==========================================
 # Root of app. Fetch a list of all devices
@@ -50,7 +50,14 @@ class SensorView(generic.ListView):
         return Measurement.objects.filter(sensor = self.kwargs['pk']).order_by('datetime')
 
 
-
-
 def getSensors():
     return Sensor.objects.order_by('name')
+
+
+
+class MeasurementViewset(viewsets.ModelViewSet):
+    # define queryset
+    queryset = Measurement.objects.all()
+ 
+    # specify serializer to be used
+    serializer_class = MeasurementSerializer
