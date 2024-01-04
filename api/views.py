@@ -1,4 +1,4 @@
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from .models        import Measurement
 from .serializers   import MeasurementSerializer
 
@@ -21,9 +21,14 @@ class MeasurementViewset(viewsets.ModelViewSet):
 
         # Grab the parameters from the HTTP request
         sensor_id = self.request.query_params.get('sensor')
+        device_id = self.request.query_params.get('device');
         
-        # Apply the filters only if the params exist
-        if (sensor_id is not None):
+        # Apply the filters only if the params exist and are not all
+        if (sensor_id and sensor_id is not 'all'):
             queryset = queryset.filter(sensor = sensor_id)
+
+        if (device_id and device_id is not 'all'):
+            queryset = queryset.filter(device = device_id)
+
 
         return queryset
