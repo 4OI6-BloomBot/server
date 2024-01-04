@@ -1,3 +1,4 @@
 from django.db import models
 
-# Create your models here.
+# Import the models that are referenced in the API
+from sensor_data.models import Measurement
