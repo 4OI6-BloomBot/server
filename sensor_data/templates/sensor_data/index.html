@@ -51,41 +51,70 @@
     </script>
 
     <script>
+        {% comment %} Globally accessible vars {% endcomment %}
+        device_data = null;
         
-        const data = [
-          {% for measurement in measurement_list %}
-            { 
-              device: "{{ measurement.device.name }}",
-              time:   "{{ measurement.datetime }}",
-              value:  {{ measurement.value }}
-            },
-          {% endfor %}
-        ];
+        {% comment %} 
+          Fetch the measurement data from the API
+        {% endcomment %}
+        function fetchMeasurements() {
+          $.ajax({
+            url:      "http://localhost:8000/api/measurements/",
+            method:   'GET',
+            dataType: 'json',
 
+            success: function(d) {
+              devices     = [...new Set(d.map(item => item.device))];
+              device_data = []
 
-        new Chart(
-          document.getElementById('sensor_chart'),
-          {
-            type: 'line',            
-            data: {
-              labels: data.map(row => row.year),
-              datasets: [
-                {% for measurement in device_list %}
-                    {% with measurement.device as device %}
+              // Separate the data by device ID for each dataset
+              for (i = 0; i < devices.length; i++) {
+                filtered_data = d.filter(item => item.device == devices[i]);
+                
+                // Initialize the dataset
+                device_data.push(
+                  {
+                    label: devices[i],
+                    data:  []
+                  }
+                );
+
+                // Iterate over each entry and parse data for chart format
+                for (j = 0; j < filtered_data.length; j++) {
+                  device_data.data.push(
                     {
-                        label: "{{ device.name }}",
-                        data: data
-                          .filter(row => row.device === "{{ device.name }}")
-                          .map(row => ({
-                            x: row.time,
-                            y: row.value
-                          }))
-                    },
-                    {% endwith %}
-                {% endfor %}
-              ]
+                      x: filtered_data[j].datetime,
+                      y: filtered_data[j].value
+                    }
+                  );
+                }
+              }
+
+              createChart();
             }
-          }
-        );
+          });
+        }
+
+        {% comment %} 
+          Update the chart with the device data
+        {% endcomment %}
+        function createChart() {
+          new Chart(
+            document.getElementById('sensor_chart'),
+            {
+              type: 'line',            
+              data: {
+                datasets: measurement_data.datasets
+              }
+            }
+          );
+        }
+
+
+        {% comment %} 
+          Call to fetch from API
+          TODO: Should run every X seconds
+        {% endcomment %}
+        fetchMeasurements();
     </script>
 {% endblock %}
