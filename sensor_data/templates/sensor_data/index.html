@@ -36,8 +36,9 @@
     {% endif %}
 
     {% if sensor_list %}
+        <button class="btn btn-primary" onclick="setSensorID(null)">All</button>
         {% for sensor in sensor_list %}
-            <a href="{% url 'sensor_data:sensor' sensor.pk %}"><button class="btn btn-primary">{{ sensor.name }}</button></a>
+          <button class="btn btn-primary" onclick="setSensorID({{ sensor.pk }})">{{ sensor.name }}</button>
         {% endfor %}
     {% endif %}
 {% endblock %}
@@ -52,76 +53,100 @@
 
     <script>
         {% comment %} Globally accessible vars {% endcomment %}
+        chart       = null;
         device_data = null;
+        sensor_id   = null;
         
         {% comment %} 
           Fetch the measurement data from the API
         {% endcomment %}
         function fetchMeasurements() {
-          $.ajax({
-            url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
-            method:   'GET',
-            dataType: 'json',
+            $.ajax({
+                url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
+                method:   'GET',
+                dataType: 'json',
+                data: {
+                    sensor : sensor_id
+                },
 
-            success: function(d) {
-              devices     = [...new Set(d.map(item => item.device))];
-              device_data = []
+                success: function(d) {
+                    devices     = [...new Set(d.map(item => item.device))];
+                    device_data = []
 
-              // Separate the data by device ID for each dataset
-              for (i = 0; i < devices.length; i++) {
-                filtered_data = d.filter(item => item.device == devices[i]);
-                
-                // Parse and add the dataset to the array
-                device_data.push(createDatasetObj(devices[i], filtered_data));
-              }
+                    // Separate the data by device ID for each dataset
+                    for (i = 0; i < devices.length; i++) {
+                        filtered_data = d.filter(item => item.device == devices[i]);
+                    
+                        // Parse and add the dataset to the array
+                        device_data.push(createDatasetObj(devices[i], filtered_data));
+                    }
 
-              createChart();
-            }
-          });
+                    updateChart();
+                }
+            });
         }
 
         {% comment %} 
           Creates a dataset out of the passed measurement data
         {% endcomment %}
         function createDatasetObj(label, data) {
-          obj = {
-            label: label,
-            data:  []
-          }
+            obj = {
+                label: label,
+                data:  []
+            }
 
-          // Iterate over each entry and parse data for chart format
-          for (j = 0; j < data.length; j++) {
-            obj.data.push(
-              {
-                x: data[j].datetime,
-                y: data[j].value
-              }
-            );
-          }
+            // Iterate over each entry and parse data for chart format
+            for (j = 0; j < data.length; j++) {
+                obj.data.push(
+                    {
+                        x: data[j].datetime,
+                        y: data[j].value
+                    }
+                );
+            }
 
-          return obj;
+            return obj;
         }
 
         {% comment %} 
           Update the chart with the device data
         {% endcomment %}
         function createChart() {
-          new Chart(
-            document.getElementById('sensor_chart'),
-            {
-              type: 'line',            
-              data: {
-                datasets: device_data
-              }
-            }
-          );
+            chart = new Chart(
+                document.getElementById('sensor_chart'),
+                {
+                    type: 'line',            
+                    data: {
+                        datasets: device_data
+                    }
+                }
+            );
         }
 
+
+        {% comment %} 
+          Update the chart datasets
+        {% endcomment %}
+        function updateChart() {
+            chart.data.datasets = device_data;
+            chart.update();
+        }
+
+
+        {% comment %} 
+          Function to set the HTML parsing args
+        {% endcomment %}
+        function setSensorID(id) {
+            sensor_id = id;
+            fetchMeasurements();
+        }
 
         {% comment %} 
           Call to fetch from API
           TODO: Should run every X seconds
         {% endcomment %}
+        createChart();
         fetchMeasurements();
+
     </script>
 {% endblock %}
