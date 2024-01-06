@@ -21,15 +21,6 @@
                     <th scope="col">Timestamp</th>
                 </tr>
             </thead>
-      
-            {% for measurement in measurement_list %}
-                <tr>
-                    <td>{{ measurement.device.name }}</td>
-                    <td>{{ measurement.sensor.name }}</td>
-                    <td>{{ measurement.value }} {{ measurement.sensor.unit }}</td>
-                    <td>{{ measurement.datetime }}</td>
-                </tr>
-            {% endfor %}
         </table>
     {% else %}
         <p>No measurements are available.</p>
