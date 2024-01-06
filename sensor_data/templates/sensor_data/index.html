@@ -48,12 +48,21 @@
     <script src="{% static './chartjs/chart.min.js' %}"></script>
 
     <script>
-        new DataTable("#measurement_table");
-    </script>
+        {% comment %}
+          Declare the table
+        {% endcomment %}
+        table = new DataTable("#measurement_table", {
+            columns: [
+              { data: "device" },
+              { data: "sensor" },
+              { data: "value" },
+              { data: "datetime" }
+            ]
+        });
 
-    <script>
         {% comment %} Globally accessible vars {% endcomment %}
         chart       = null;
+        table_data  = null;
         device_data = null;
         sensor_id   = null;
         
@@ -72,16 +81,19 @@
                 success: function(d) {
                     devices     = [...new Set(d.map(item => item.device))];
                     device_data = []
+                    table_data  = []
 
                     // Separate the data by device ID for each dataset
                     for (i = 0; i < devices.length; i++) {
                         filtered_data = d.filter(item => item.device == devices[i]);
-                    
+                        table_data.push(...filtered_data);
+
                         // Parse and add the dataset to the array
                         device_data.push(createDatasetObj(devices[i], filtered_data));
                     }
 
                     updateChart();
+                    updateTable();
                 }
             });
         }
@@ -139,6 +151,16 @@
         function setSensorID(id) {
             sensor_id = id;
             fetchMeasurements();
+        }
+
+
+        {% comment %} 
+          Function to update the data in the table
+        {% endcomment %}
+        function updateTable() {
+            table.clear();
+            table.rows.add(table_data);
+            table.draw();
         }
 
         {% comment %} 
