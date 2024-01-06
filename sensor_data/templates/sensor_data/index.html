@@ -59,7 +59,7 @@
         {% endcomment %}
         function fetchMeasurements() {
           $.ajax({
-            url:      "http://localhost:8000/api/measurements/",
+            url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
             method:   'GET',
             dataType: 'json',
 
@@ -71,28 +71,35 @@
               for (i = 0; i < devices.length; i++) {
                 filtered_data = d.filter(item => item.device == devices[i]);
                 
-                // Initialize the dataset
-                device_data.push(
-                  {
-                    label: devices[i],
-                    data:  []
-                  }
-                );
-
-                // Iterate over each entry and parse data for chart format
-                for (j = 0; j < filtered_data.length; j++) {
-                  device_data.data.push(
-                    {
-                      x: filtered_data[j].datetime,
-                      y: filtered_data[j].value
-                    }
-                  );
-                }
+                // Parse and add the dataset to the array
+                device_data.push(createDatasetObj(devices[i], filtered_data));
               }
 
               createChart();
             }
           });
+        }
+
+        {% comment %} 
+          Creates a dataset out of the passed measurement data
+        {% endcomment %}
+        function createDatasetObj(label, data) {
+          obj = {
+            label: label,
+            data:  []
+          }
+
+          // Iterate over each entry and parse data for chart format
+          for (j = 0; j < data.length; j++) {
+            obj.data.push(
+              {
+                x: data[j].datetime,
+                y: data[j].value
+              }
+            );
+          }
+
+          return obj;
         }
 
         {% comment %} 
@@ -104,7 +111,7 @@
             {
               type: 'line',            
               data: {
-                datasets: measurement_data.datasets
+                datasets: device_data
               }
             }
           );
