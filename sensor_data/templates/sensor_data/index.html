@@ -53,10 +53,11 @@
         });
 
         {% comment %} Globally accessible vars {% endcomment %}
-        chart       = null;
-        table_data  = null;
-        device_data = null;
-        sensor_id   = null;
+        chart            = null;
+        table_data       = null;
+        device_data      = null;
+        sensor_id        = null;
+        last_received_id = null;
         
         {% comment %} 
           Fetch all the measurement data from the API
@@ -67,15 +68,22 @@
                 method:   'GET',
                 dataType: 'json',
                 data: {
-                    sensor : sensor_id
+                    sensor       : sensor_id,
+                    last_received: last_received_id
                 },
 
                 success: function(d) {
-                    
-                    parseDeviceData(d);
 
-                    updateChart();
-                    updateTable();
+                    // Skip updates if there is no new data
+                    if (d.length > 0) {
+                        parseDeviceData(d);
+
+                        // Update the last received ID
+                        last_received_id = d[d.length - 1].id;
+
+                        updateChart();
+                        updateTable();
+                    }
                 }
             });
         }
