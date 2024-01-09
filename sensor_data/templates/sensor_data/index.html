@@ -182,6 +182,12 @@
         {% endcomment %}
         function setSensorID(id) {
             sensor_id = id;
+
+            // Reset data and last received id
+            device_data      = [];
+            table_data       = [];
+            last_received_id = null;
+
             fetchMeasurements();
         }
 
