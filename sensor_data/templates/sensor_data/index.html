@@ -30,13 +30,13 @@
     {% if sensor_list %}
         <button class="btn btn-primary" onclick="setSensorID(null)">All</button>
         {% for sensor in sensor_list %}
-          <button class="btn btn-primary" onclick="setSensorID({{ sensor.pk }})">{{ sensor.name }}</button>
+            <button class="btn btn-primary" onclick="setSensorID({{ sensor.pk }})">{{ sensor.name }}</button>
         {% endfor %}
     {% endif %}
 {% endblock %}
 
 {% block js %}
-    {% comment %} CharJS Import {% endcomment %}
+    {% comment %} ChartJS Import {% endcomment %}
     <script src="{% static './chartjs/chart.min.js' %}"></script>
 
     <script>
@@ -59,10 +59,9 @@
         sensor_id   = null;
         
         {% comment %} 
-          Fetch the measurement data from the API
+          Fetch all the measurement data from the API
         {% endcomment %}
         function fetchMeasurements() {
-          console.log("test");
             $.ajax({
                 url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
                 method:   'GET',
@@ -72,24 +71,34 @@
                 },
 
                 success: function(d) {
-                    devices     = [...new Set(d.map(item => item.device))];
-                    device_data = []
-                    table_data  = []
-
-                    // Separate the data by device ID for each dataset
-                    for (i = 0; i < devices.length; i++) {
-                        filtered_data = d.filter(item => item.device == devices[i]);
-                        table_data.push(...filtered_data);
-
-                        // Parse and add the dataset to the array
-                        device_data.push(createDatasetObj(devices[i], filtered_data));
-                    }
+                    
+                    parseDeviceData(d);
 
                     updateChart();
                     updateTable();
                 }
             });
         }
+
+        {% comment %} 
+          Find each of the unique devices from the data and separate the measurements
+          into datasets for each device.
+        {% endcomment %}
+        function parseDeviceData(d) {
+            devices     = [...new Set(d.map(item => item.device))];
+            device_data = []
+            table_data  = []
+
+            // Separate the data by device ID for each dataset
+            for (i = 0; i < devices.length; i++) {
+                filtered_data = d.filter(item => item.device == devices[i]);
+                table_data.push(...filtered_data);
+
+                // Parse and add the dataset to the array
+                device_data.push(createDatasetObj(devices[i], filtered_data));
+            }
+        }
+
 
         {% comment %} 
           Creates a dataset out of the passed measurement data
@@ -161,7 +170,7 @@
         {% endcomment %}
         fetchMeasurements();
         createChart();
-        
+
         const fetch = setInterval(fetchMeasurements, 5000);
 
     </script>
