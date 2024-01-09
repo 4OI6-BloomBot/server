@@ -62,6 +62,7 @@
           Fetch the measurement data from the API
         {% endcomment %}
         function fetchMeasurements() {
+          console.log("test");
             $.ajax({
                 url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
                 method:   'GET',
@@ -156,11 +157,12 @@
         }
 
         {% comment %} 
-          Call to fetch from API
-          TODO: Should run every X seconds
+          Setup chart and update data periodically (5 seconds)
         {% endcomment %}
-        createChart();
         fetchMeasurements();
+        createChart();
+        
+        const fetch = setInterval(fetchMeasurements, 5000);
 
     </script>
 {% endblock %}
