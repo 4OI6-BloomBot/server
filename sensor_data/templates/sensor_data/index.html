@@ -36,6 +36,8 @@
 {% endblock %}
 
 {% block js %}
+    {% comment %} TODO: This needs to be abstracted. There should be a class for the data management that the chart/table can grab from. {% endcomment %}
+
     {% comment %} ChartJS Import {% endcomment %}
     <script src="{% static './chartjs/chart.min.js' %}"></script>
 
@@ -54,8 +56,8 @@
 
         {% comment %} Globally accessible vars {% endcomment %}
         chart            = null;
-        table_data       = null;
-        device_data      = null;
+        table_data       = [];
+        device_data      = [];
         sensor_id        = null;
         last_received_id = null;
         
@@ -77,9 +79,9 @@
                     // Skip updates if there is no new data
                     if (d.length > 0) {
                         parseDeviceData(d);
-
+                        console.log(d);
                         // Update the last received ID
-                        last_received_id = d[d.length - 1].id;
+                        last_received_id = d[d.length - 1].id - 1;
 
                         updateChart();
                         updateTable();
@@ -93,18 +95,26 @@
           into datasets for each device.
         {% endcomment %}
         function parseDeviceData(d) {
-            devices     = [...new Set(d.map(item => item.device))];
-            device_data = []
-            table_data  = []
+            devices = [...new Set(d.map(item => item.device))];
 
             // Separate the data by device ID for each dataset
             for (i = 0; i < devices.length; i++) {
                 filtered_data = d.filter(item => item.device == devices[i]);
                 table_data.push(...filtered_data);
 
-                // Parse and add the dataset to the array
-                device_data.push(createDatasetObj(devices[i], filtered_data));
-            }
+                // Search the array for the object w/ the current device ID
+                // dataset_index will be equal to the index of the object if it exists.
+                // Undefined if not.
+                dataset_index = device_data.findIndex(obj => { 
+                    return obj.label === devices[i];
+                });
+
+
+                // Append the new data if the object already exists, otherwise create
+                // the object.
+                if (dataset_index != -1) appendMeasurementData(dataset_index, filtered_data);
+                else                     createDatasetObj(devices[i],         filtered_data);
+              }
         }
 
 
@@ -112,23 +122,35 @@
           Creates a dataset out of the passed measurement data
         {% endcomment %}
         function createDatasetObj(label, data) {
-            obj = {
+            // Create a new object for the device data
+            device_data.push(
+              {
                 label: label,
                 data:  []
-            }
+              }
+            );
 
+            appendMeasurementData(device_data.length - 1, data);
+        }
+
+        {% comment %} 
+          Appends data to the given obj
+        {% endcomment %}
+        function appendMeasurementData(index, data) {
+            
             // Iterate over each entry and parse data for chart format
+            // TODO: This needs to be updated to add data in order of time. 
+            //       Otherwise, the chart will go back over itself.
             for (j = 0; j < data.length; j++) {
-                obj.data.push(
+                device_data[index].data.push(
                     {
                         x: data[j].datetime,
                         y: data[j].value
                     }
                 );
             }
-
-            return obj;
         }
+
 
         {% comment %} 
           Update the chart with the device data
