@@ -79,12 +79,12 @@
                     // Skip updates if there is no new data
                     if (d.length > 0) {
                         parseDeviceData(d);
-                        console.log(d);
+
                         // Update the last received ID
                         last_received_id = d[d.length - 1].id;
 
                         updateChart();
-                        updateTable();
+                        updateTable(d);
                     }
                 }
             });
@@ -194,6 +194,7 @@
 
         {% comment %} 
           Function to update the data in the table
+          TODO: Shoudn't clear all data each time we add rows. 
         {% endcomment %}
         function updateTable() {
             table.clear();
