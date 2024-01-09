@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/',    admin.site.urls),
     path('devices/',  include('devices.urls')),
     path('samples/',  include('sensor_data.urls')),
-    path('location/', include('location.urls'))
+    path('location/', include('location.urls')),
+    path('api/',      include('api.urls'))
 ]

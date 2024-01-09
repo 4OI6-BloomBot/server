@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% comment %}
     Template for displaying a table of measurements
@@ -7,7 +8,10 @@
 {% endcomment %}
 
 {% block content %}
-    {% if measurement_list %}
+    {% comment %} TODO: Don't really need to pass any measurement data to this anymore {% endcomment %}
+    {% if measurement_list %} 
+        <div style="width: 800px;"><canvas id="sensor_chart"></canvas></div>
+
         <table id="measurement_table" class="table">
             {% comment %} Table headers {% endcomment %}
             <thead>
@@ -18,24 +22,156 @@
                     <th scope="col">Timestamp</th>
                 </tr>
             </thead>
-      
-            {% for measurement in measurement_list %}
-                <tr>
-                    <td>{{ measurement.device.name }}</td>
-                    <td>{{ measurement.sensor.name }}</td>
-                    <td>{{ measurement.value }} {{ measurement.sensor.unit }}</td>
-                    <td>{{ measurement.datetime }}</td>
-                </tr>
-            {% endfor %}
         </table>
     {% else %}
         <p>No measurements are available.</p>
     {% endif %}
 
+    {% if sensor_list %}
+        <button class="btn btn-primary" onclick="setSensorID(null)">All</button>
+        {% for sensor in sensor_list %}
+            <button class="btn btn-primary" onclick="setSensorID({{ sensor.pk }})">{{ sensor.name }}</button>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block js %}
+    {% comment %} ChartJS Import {% endcomment %}
+    <script src="{% static './chartjs/chart.min.js' %}"></script>
+
     <script>
-        new DataTable("#measurement_table");
+        {% comment %}
+          Declare the table
+        {% endcomment %}
+        table = new DataTable("#measurement_table", {
+            columns: [
+              { data: "device" },
+              { data: "sensor" },
+              { data: "value" },
+              { data: "datetime" }
+            ]
+        });
+
+        {% comment %} Globally accessible vars {% endcomment %}
+        chart       = null;
+        table_data  = null;
+        device_data = null;
+        sensor_id   = null;
+        
+        {% comment %} 
+          Fetch all the measurement data from the API
+        {% endcomment %}
+        function fetchMeasurements() {
+            $.ajax({
+                url:      "http://localhost:8000/api/measurements/", // TODO: Change to configurable route
+                method:   'GET',
+                dataType: 'json',
+                data: {
+                    sensor : sensor_id
+                },
+
+                success: function(d) {
+                    
+                    parseDeviceData(d);
+
+                    updateChart();
+                    updateTable();
+                }
+            });
+        }
+
+        {% comment %} 
+          Find each of the unique devices from the data and separate the measurements
+          into datasets for each device.
+        {% endcomment %}
+        function parseDeviceData(d) {
+            devices     = [...new Set(d.map(item => item.device))];
+            device_data = []
+            table_data  = []
+
+            // Separate the data by device ID for each dataset
+            for (i = 0; i < devices.length; i++) {
+                filtered_data = d.filter(item => item.device == devices[i]);
+                table_data.push(...filtered_data);
+
+                // Parse and add the dataset to the array
+                device_data.push(createDatasetObj(devices[i], filtered_data));
+            }
+        }
+
+
+        {% comment %} 
+          Creates a dataset out of the passed measurement data
+        {% endcomment %}
+        function createDatasetObj(label, data) {
+            obj = {
+                label: label,
+                data:  []
+            }
+
+            // Iterate over each entry and parse data for chart format
+            for (j = 0; j < data.length; j++) {
+                obj.data.push(
+                    {
+                        x: data[j].datetime,
+                        y: data[j].value
+                    }
+                );
+            }
+
+            return obj;
+        }
+
+        {% comment %} 
+          Update the chart with the device data
+        {% endcomment %}
+        function createChart() {
+            chart = new Chart(
+                document.getElementById('sensor_chart'),
+                {
+                    type: 'line',            
+                    data: {
+                        datasets: device_data
+                    }
+                }
+            );
+        }
+
+
+        {% comment %} 
+          Update the chart datasets
+        {% endcomment %}
+        function updateChart() {
+            chart.data.datasets = device_data;
+            chart.update();
+        }
+
+
+        {% comment %} 
+          Function to set the HTML parsing args
+        {% endcomment %}
+        function setSensorID(id) {
+            sensor_id = id;
+            fetchMeasurements();
+        }
+
+
+        {% comment %} 
+          Function to update the data in the table
+        {% endcomment %}
+        function updateTable() {
+            table.clear();
+            table.rows.add(table_data);
+            table.draw();
+        }
+
+        {% comment %} 
+          Setup chart and update data periodically (5 seconds)
+        {% endcomment %}
+        fetchMeasurements();
+        createChart();
+
+        const fetch = setInterval(fetchMeasurements, 5000);
+
     </script>
 {% endblock %}
