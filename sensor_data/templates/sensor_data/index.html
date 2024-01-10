@@ -19,6 +19,7 @@
                     <th scope="col">Device</th>
                     <th scope="col">Sensor Type</th>
                     <th scope="col">Value</th>
+                    <th scope="col">Unit</th>
                     <th scope="col">Timestamp</th>
                 </tr>
             </thead>
@@ -48,9 +49,27 @@
         {% endcomment %}
         table      = new DataTable("#measurement_table", {
                         columns: [
-                          { data: "device" },
-                          { data: "sensor" },
-                          { data: "value" },
+                          { 
+                            data:   "device",
+                            render: function(data) {
+                              return data.name;
+                            }
+                          },
+                          { 
+                            data:   "sensor",
+                            render: function(data) {
+                              return data.name;
+                            }
+                          },
+                          { 
+                            data:   "value",
+                          },
+                          {
+                            unit: "unit", 
+                            render: function(data, type, row, meta) {
+                              return row.sensor.unit; 
+                            }
+                          },
                           { data: "datetime" }
                         ]
                       });

@@ -31,7 +31,8 @@ class SensorSerializer(serializers.ModelSerializer):
     model = Sensor
     fields = (
       'id', 
-      'name'
+      'name',
+      'unit'
     )
 
 
