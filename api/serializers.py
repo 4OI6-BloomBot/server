@@ -6,21 +6,35 @@
 # Imports
 # ========================
 from rest_framework import serializers
-from .models        import Measurement
+from .models        import Measurement, Sensor
  
+
+# ==========================================
+# Sensor type serializer
+# ==========================================      
+class SensorSerializer(serializers.ModelSerializer):
+   
+  class Meta:
+    model = Sensor
+    fields = (
+      'id', 
+      'name'
+    )
+    
 
 # ==========================================
 # Sensor data serializer
 # ==========================================
 class MeasurementSerializer(serializers.ModelSerializer):
     
-  class Meta:
-      model  = Measurement
-      fields = (
-          'id',
-          'device',
-          'sensor',
-          'value',
-          'datetime'
-      )
+  device = SensorSerializer(read_only = True)
 
+  class Meta:
+    model  = Measurement
+    fields = (
+      'id',
+      'device',
+      'sensor',
+      'value',
+      'datetime'
+    )
