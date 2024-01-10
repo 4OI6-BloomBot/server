@@ -44,17 +44,21 @@
 
     <script>
         {% comment %}
-          Declare the table and chart objects
+          Declare the table and table data array
         {% endcomment %}
-        table = new DataTable("#measurement_table", {
-            columns: [
-              { data: "device" },
-              { data: "sensor" },
-              { data: "value" },
-              { data: "datetime" }
-            ]
-        });
+        table      = new DataTable("#measurement_table", {
+                        columns: [
+                          { data: "device" },
+                          { data: "sensor" },
+                          { data: "value" },
+                          { data: "datetime" }
+                        ]
+                      });
 
+
+        {% comment %} 
+          Declare the chart object
+        {% endcomment %}
         chart = new Chart(
           document.getElementById('sensor_chart'),
           {
@@ -64,34 +68,38 @@
               }
           }
         );
+
+
+        {% comment %} 
+          Create an instance of the measurement data handler class
+          Manages calls to the API and data parsing.
+        {% endcomment %}
+        handler = new MeasurementDataHandler(new_data_callback);
+
+        {% comment %} 
+          Callback function that is called when new data is available
+          Array of new datapoints is passed.
+        {% endcomment %}
+        function new_data_callback(d) {
+          // Update table
+          table.rows.add(d);
+          table.draw();
+
+          // Update chart
+          chart.data.datasets = handler.device_datasets;
+          chart.update();
+        }
       
 
         {% comment %} 
-          Update the chart datasets
+          Update the sensor ID in the handler.
+          Clear the table data to prep for new values.
         {% endcomment %}
-        function updateChart() {
-            chart.data.datasets = device_data;
-            chart.update();
+        function setSensorID(id) {
+          table.clear();
+
+          handler.setSensorID(id);
         }
-
-
-        {% comment %} 
-          Function to update the data in the table
-          TODO: Shoudn't clear all data each time we add rows. 
-        {% endcomment %}
-        function updateTable() {
-            table.clear();
-            table.rows.add(table_data);
-            table.draw();
-        }
-
-        {% comment %} 
-          Setup chart and update data periodically (5 seconds)
-        {% endcomment %}
-        fetchMeasurements();
-        createChart();
-
-        const fetch = setInterval(fetchMeasurements, 5000);
 
     </script>
 {% endblock %}
