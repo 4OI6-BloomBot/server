@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from .models        import Measurement
 from .serializers   import MeasurementSerializer
 from django.utils   import timezone, dateparse
@@ -6,11 +6,23 @@ from datetime       import timedelta
 
 
 # ======================================================
+# Base viewset.
+# Configured to only allow listing and creating data.
+# TODO: Auth needs to be added
+# ======================================================
+class BaseViewset(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  viewsets.GenericViewSet):
+    
+    queryset         = None
+    serializer_class = None
+
+
+# ======================================================
 # Sensor data view set.
 # Handles API access to the sensor data model. 
-# TODO: Auth needs to be added for writes
 # ======================================================
-class MeasurementViewset(viewsets.ModelViewSet):
+class MeasurementViewset(BaseViewset):
     # Define queryset & serializer
     queryset         = Measurement.objects.all()
     serializer_class = MeasurementSerializer
