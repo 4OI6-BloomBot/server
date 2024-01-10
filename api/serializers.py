@@ -20,14 +20,14 @@ class SensorSerializer(serializers.ModelSerializer):
       'id', 
       'name'
     )
-    
+
 
 # ==========================================
 # Sensor data serializer
 # ==========================================
 class MeasurementSerializer(serializers.ModelSerializer):
     
-  device = SensorSerializer(read_only = True)
+  sensor = SensorSerializer(read_only = True)
 
   class Meta:
     model  = Measurement
