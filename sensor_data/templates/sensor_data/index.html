@@ -52,7 +52,10 @@
                           { 
                             data:   "device",
                             render: function(data) {
-                              return data.name;
+                              // TODO: Should be server side? 
+                              // TODO: Link should not be static.
+                              device_link = "http://localhost:8000/devices/" + data.id;
+                              return "<a href='" + device_link + "'>" + data.name + "</a>";
                             }
                           },
                           { 
