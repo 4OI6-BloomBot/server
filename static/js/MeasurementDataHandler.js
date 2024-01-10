@@ -79,7 +79,7 @@ class MeasurementDataHandler {
   parseDeviceData(d) {
     var filtered_data = [];
     var devices       = [...new Set(d.map(item => item.device))];
-
+    
     // Separate the data by device ID for each dataset
     for (var i = 0; i < devices.length; i++) {
       filtered_data = d.filter(item => item.device == devices[i]);
@@ -89,7 +89,7 @@ class MeasurementDataHandler {
       // dataset_index will be equal to the index of the object if it exists.
       // Undefined if not.
       var dataset_index = this.device_datasets.findIndex(obj => { 
-          return obj.label === devices[i];
+          return obj.device_id === devices[i].id;
       });
 
 
@@ -105,12 +105,13 @@ class MeasurementDataHandler {
   // Creates a dataset out of the passed 
   // measurement data
   // ==============================================
-  createDatasetObj(label, data) {
+  createDatasetObj(device, data) {
     // Create a new object for the device data
     this.device_datasets.push(
       {
-        label: label,
-        data:  []
+        device_id: device.id,
+        label:     device.name,
+        data:      []
       }
     );
 
