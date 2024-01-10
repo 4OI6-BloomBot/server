@@ -30,7 +30,7 @@ class MeasurementDataHandler {
     // Start the fetch loop
     // ========================================
     this.fetch_loop = setInterval(this.fetchMeasurements.bind(this), this.fetch_interval);
-    
+    this.fetchMeasurements(); // Run at creation
   }
 
 
