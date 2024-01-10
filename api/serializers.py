@@ -17,9 +17,10 @@ class MeasurementSerializer(serializers.ModelSerializer):
   class Meta:
       model  = Measurement
       fields = (
-        'device',
-        'sensor',
-        'value',
-        'datetime'
+          'id',
+          'device',
+          'sensor',
+          'value',
+          'datetime'
       )
 
