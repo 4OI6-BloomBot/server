@@ -14,8 +14,7 @@ class BaseViewset(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   viewsets.GenericViewSet):
     
-    queryset         = None
-    serializer_class = None
+    pass
 
 
 # ======================================================
@@ -60,3 +59,6 @@ class MeasurementViewset(BaseViewset):
 
 
         return queryset.order_by("time_received")
+    
+
+    
