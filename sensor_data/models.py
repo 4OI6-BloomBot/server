@@ -46,5 +46,5 @@ class Measurement(models.Model):
 
   # Override string method to return the given name
   def __str__(self):
-    return self.device.name + "_" + self.sensor.name
+    return str(self.device) + "_" + self.sensor.name
   
