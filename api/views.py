@@ -1,8 +1,8 @@
-from rest_framework import viewsets, mixins
-from .models        import Measurement
-from .serializers   import MeasurementSerializer
-from django.utils   import timezone, dateparse
-from datetime       import timedelta
+from rest_framework                      import viewsets, mixins
+from .models                             import Measurement
+from .serializers.measurement_serializer import MeasurementSerializer
+from django.utils                        import timezone, dateparse
+from datetime                            import timedelta
 
 
 # ======================================================
