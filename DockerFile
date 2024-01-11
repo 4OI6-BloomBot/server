@@ -1,0 +1,16 @@
+# Base image
+FROM python:3.12.1
+
+# Configure dir and install requirements
+WORKDIR /app
+COPY    requirements.txt .
+RUN     pip install --no-cache-dir -r requirements.txt
+
+# Copy all of the project files to the app dir
+COPY . .
+
+# Open port 8000
+EXPOSE 8000
+
+# Run the Django server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
