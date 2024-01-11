@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
-import os
+from   pathlib import Path
+import os, json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jqegt!-42xt%&5*=l(1a&ycrl4n*)l0@wxo2mgoepc65x8bm)9'
+SECRET_KEY = os.getenv('BB_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('BB_DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
 # Application definition
@@ -83,12 +83,17 @@ WSGI_APPLICATION = 'bloombot_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.postgresql_psycopg2',
-        'NAME':     'test',
-        'USER':     'bloombot_server',
-        'PASSWORD': 'bloombot', # TODO: Change to secret
-        'HOST':     'localhost',
-        'PORT':     '5432',
+        'ENGINE':   'django.db.backends.{}'.format(
+                        os.getenv('DATABASE_ENGINE', 'postgresql_psycopg2')
+                      ),
+        'NAME':     os.getenv('DATABASE_NAME',     'test'),
+        'USER':     os.getenv('DATABASE_USERNAME', 'bloombot_server'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'bloombot'), 
+        'HOST':     os.getenv('DATABASE_HOST',     '127.0.0.1'),
+        'PORT':     os.getenv('DATABASE_PORT',     '5432'),
+        'OPTIONS':  json.loads(
+                      os.getenv('DATABASE_OPTIONS', '{}')
+                    )
     }
 }
 
