@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.12.1
+FROM python:3.12.1-alipine3.19
 
 # Configure dir and install requirements
 WORKDIR /app
