@@ -28,17 +28,43 @@ class DeviceSerializer(serializers.ModelSerializer):
     # Hardware ID should only be provided for writes
     extra_kwargs = {
       'hwID' : {
-        'write_only' : True
-      }
+        'write_only' : True,
+        'validators' : []
+      },
     }
+  
 
+  # ==========================================
+  # Update the data with the device obj
+  # ==========================================
+  def validate(self, validated_data):
+    # If the device does not exist, create it.
+    # Otherwise, return the device
+    try:
+      validated_data = Device.objects.get(hwID = validated_data['hwID'])
+    except:
+      validated_data = self.save(validated_data['hwID'])
+
+    return validated_data
+
+
+  # ==========================================
+  # Create a new device with the given hwID
+  # ==========================================
+  def save(self, hwID):
+    device = Device(hwID = hwID)
+    device.save()
+
+    return device
   
 
 # ==========================================
 # Sensor type serializer
 # ==========================================      
 class SensorSerializer(serializers.ModelSerializer):
-   
+  
+  id = serializers.IntegerField()
+
   class Meta:
     model = Sensor
     fields = (
@@ -47,6 +73,26 @@ class SensorSerializer(serializers.ModelSerializer):
       'unit'
     )
 
+    # Do not allow writes to the sensor data
+    read_only_fields = ('name', 'unit')
+
+
+  # ==========================================
+  # Check if the sensor ID exists and update
+  # the data with the obj if so
+  # ==========================================
+  def validate(self, validated_data):
+    
+    if (self.context['request'].method == 'POST'):
+      # Check if sensor with the passed ID exists
+      # Throw an error if it DNE
+      try:
+        validated_data = Sensor.objects.get(id = validated_data['id'])
+      except:
+        raise serializers.ValidationError(detail = "Sensor with ID " + str(validated_data['id']) + " does not exist", code = 200)
+
+    return validated_data
+
 
 # ==========================================
 # Sensor data serializer
@@ -54,8 +100,7 @@ class SensorSerializer(serializers.ModelSerializer):
 class MeasurementSerializer(serializers.ModelSerializer):
     
   device = DeviceSerializer()
-  sensor = SensorSerializer(read_only = True)
-
+  sensor = SensorSerializer()
 
   class Meta:
     model  = Measurement
@@ -67,15 +112,14 @@ class MeasurementSerializer(serializers.ModelSerializer):
       'datetime'
     )
 
-  # ==========================================
-  # Validate the passed data
-  # ==========================================
-  def validate(self, validated_data):
-    if (self.context['request'].method == 'POST'):
-      validated_data['device'] = self.context
 
   # ==========================================
-  # Create a new object with the passed data
+  # Validate the passed data
+  # TODO: Need to check if value/date needs
+  #       validation.
   # ==========================================
-  def create(self, validated_data):
-    return Measurement.objects.create(**validated_data)
+  def validate(self, validated_data):
+
+    # New measurement validation
+    if (self.context['request'].method == 'POST'):
+      return validated_data
