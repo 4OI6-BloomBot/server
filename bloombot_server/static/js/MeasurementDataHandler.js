@@ -7,10 +7,11 @@ class MeasurementDataHandler {
   // ==============================================
   // Constructor
   // ==============================================
-  constructor(callback) {
+  constructor(endpoint, callback) {
     // ========================================
     // Config params
     // ========================================
+    this.endpoint         = endpoint;
     this.fetch_interval   = 5000;
 
     // ========================================
@@ -36,14 +37,13 @@ class MeasurementDataHandler {
 
   // ==============================================
   // Fetch data from the API
-  // TODO: Change addresss to configurable route
   // ==============================================
   fetchMeasurements() {
     // Create a reference to this obj to reference in AJAX success fn.
     var self = this;
 
     $.ajax({
-      url:      "http://localhost:8000/api/measurements/", 
+      url:      this.endpoint, 
       method:   'GET',
       dataType: 'json',
       data: {
