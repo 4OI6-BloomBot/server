@@ -7,7 +7,7 @@ COPY    bloombot_server/requirements.txt .
 
 # Add dep.
 RUN set -ex \
-  && apk add --no-cache --virtual build-base \
+  && apk add --no-cache --virtual build-base postgresql-dev \
   && python -m venv /env                                    \
   && pip install --upgrade pip                              \
   && pip install -v --no-cache-dir -r requirements.txt
