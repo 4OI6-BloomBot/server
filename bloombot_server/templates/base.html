@@ -11,21 +11,21 @@
         <title>BloomBot - {{page_title|title}}</title>  
     
         {% comment %} Bootstrap CSS import {% endcomment %}
-        <link href="{% static './lib/bootstrap-5.3.2-dist/css/bootstrap.css' %}" rel="stylesheet">
-        <link href="{% static './lib/bootstrap-5.3.2-dist/bootstrap-icons-1.11.2/font/bootstrap-icons.min.css' %}" rel="stylesheet">
+        <link href="{% static './libraries/bootstrap-5.3.2-dist/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static './libraries/bootstrap-5.3.2-dist/bootstrap-icons-1.11.2/font/bootstrap-icons.min.css' %}" rel="stylesheet">
         
         {% comment %} 
           Datatables for enhanced HTML tables 
           TODO: Should really only load this on pages that actually need it.
         {% endcomment %}
-        <link href="{% static './lib/DataTables/datatables.min.css' %}" rel="stylesheet">
+        <link href="{% static './libraries/DataTables/datatables.min.css' %}" rel="stylesheet">
 
 
         {% comment %} 
           Leaflet (maps)
           TODO: Should really only load this on pages that actually need it.
         {% endcomment %}
-        <link href="{% static './lib/leaflet/leaflet.css' %}" rel="stylesheet"/>
+        <link href="{% static './libraries/leaflet/leaflet.css' %}" rel="stylesheet"/>
 
     </head>
 
@@ -93,11 +93,11 @@
     </style>
 
     {% comment %} Bootstrap JS Import {% endcomment %}
-    <script src="{% static './lib/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static './libraries/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js' %}"></script>
 
     {% comment %} Datatables JS import {% endcomment %}
-    <script src="{% static './lib/jQuery/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static './lib/DataTables/datatables.min.js' %}"></script>
+    <script src="{% static './libraries/jQuery/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static './libraries/DataTables/datatables.min.js' %}"></script>
 
     {% block    js %}
     {% endblock js %}
