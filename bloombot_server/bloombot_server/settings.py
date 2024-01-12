@@ -26,7 +26,8 @@ SECRET_KEY = os.getenv('BB_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('BB_DEBUG', False)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
+ALLOWED_HOSTS        = os.getenv('BB_ALLOWED_HOSTS',        '127.0.0.1').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('BB_CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8000').split(',')
 
 
 # Application definition
