@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  # ================================
+  # BloomBot Server
+  # ================================
+  bb_server:
+    build: .
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - bb_static_data:/app/static
+    env_file:
+      - ./.env
+    expose:
+      - 8000
+    depends_on:
+      - db
+
+
+  # ================================
+  # Database (PostgreSQL)
+  # ================================
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+
+
+  # ================================
+  # NGINX
+  # ================================
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - ${NGINX_PORT}:80
+    volumes:
+      - bb_static_data:/app/static
+    depends_on:
+      - bb_server
+
+volumes:
+  postgres_data:
+  bb_static_data:
