@@ -38,7 +38,7 @@
 
 {% block js %}
     {% comment %} ChartJS Import {% endcomment %}
-    <script src="{% static './lib/chartjs/chart.min.js' %}"></script>
+    <script src="{% static './libraries/chartjs/chart.min.js' %}"></script>
 
     {% comment %} Import handler for measurement data {% endcomment %}
     <script src="{% static './js/MeasurementDataHandler.js' %}"></script>
@@ -54,8 +54,8 @@
                             render: function(data) {
                               // TODO: Should be server side? 
                               // TODO: Link should not be static.
-                              device_link = "http://localhost:8000/devices/" + data.id;
-                              return "<a href='" + device_link + "'>" + data.name + "</a>";
+                              device_link = "{{ request.get_host }}/devices/" + data.id;
+                              return "<a href='http://" + device_link + "'>" + data.name + "</a>"; // TODO: Needs cleanup
                             }
                           },
                           { 
@@ -97,7 +97,9 @@
           Create an instance of the measurement data handler class
           Manages calls to the API and data parsing.
         {% endcomment %}
-        handler = new MeasurementDataHandler(new_data_callback);
+        endpoint = "http://{{ request.get_host }}/api/measurements/"; // TODO: Needs cleanup
+        console.log(endpoint);
+        handler  = new MeasurementDataHandler(endpoint, new_data_callback);
 
         {% comment %} 
           Callback function that is called when new data is available
