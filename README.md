@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 You will also have to create the user and database in PostgreSQL for Django. Steps for this can be found [here](https://djangocentral.com/using-postgresql-with-django/).
 
 ### Working
-Django has a built-in development server. After starting the server, navigate to [localhost:8000](http://localhost:8000) in your browser. More information on the limitations of the dev server can be found [here](https://docs.djangoproject.com/en/4.2/intro/tutorial01/#the-development-server).
+Django has a built-in development server. After starting the server, navigate to [127.0.0.1:8000](http://127.0.0.1:8000) in your browser. More information on the limitations of the dev server can be found [here](https://docs.djangoproject.com/en/4.2/intro/tutorial01/#the-development-server).
 
 ```python
 python manage.py runserver
