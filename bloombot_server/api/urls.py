@@ -9,6 +9,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'measurements', views.MeasurementViewset)
+router.register(r'location',     views.LocationViewset)
 
 app_name    = 'api' # Register namespace
 urlpatterns = [

@@ -1,6 +1,7 @@
 from rest_framework                      import viewsets, mixins
-from .models                             import Measurement
+from .models                             import Measurement, Location
 from .serializers.measurement_serializer import MeasurementSerializer
+from .serializers.location_serializer    import LocationSerializer
 from django.utils                        import timezone, dateparse
 from datetime                            import timedelta
 
@@ -61,4 +62,27 @@ class MeasurementViewset(BaseViewset):
         return queryset.order_by("time_received")
     
 
-    
+  
+# ======================================================
+# Location data view set.
+# Handles API access to the location data model. 
+# ======================================================
+class LocationViewset(BaseViewset):
+    # Define queryset & serializer
+    queryset         = Location.objects.all()
+    serializer_class = LocationSerializer
+
+    # ============================================
+    # Update the queryset with filters applied
+    # ============================================
+    def get_queryset(self):
+        queryset = Location.objects.all()
+
+        # Grab the parameters from the HTTP request
+        device_id = self.request.query_params.get('device')
+        
+        # Apply the filters only if the params exist and are not all
+        if (device_id and device_id != 'all'):
+            queryset = queryset.filter(device = device_id)
+
+        return queryset.order_by("datetime")
