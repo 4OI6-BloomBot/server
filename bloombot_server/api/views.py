@@ -2,7 +2,7 @@ from rest_framework                      import viewsets, mixins
 from .models                             import Measurement, Location
 from .serializers.measurement_serializer import MeasurementSerializer
 from .serializers.location_serializer    import LocationSerializer
-from django.utils                        import timezone, dateparse
+from django.utils                        import timezone
 from datetime                            import timedelta
 
 
@@ -15,8 +15,18 @@ class BaseViewset(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   viewsets.GenericViewSet):
     
-    pass
+    # ============================================
+    # Filter the queryset by the device ID
+    # ============================================
+    def filterDevice(self, queryset):
+        device_id = self.request.query_params.get('device')
 
+        # Only filter if we were passed an ID
+        if (device_id and device_id != 'all'):
+            queryset = queryset.filter(device = device_id)
+
+        return queryset
+    
 
 # ======================================================
 # Sensor data view set.
@@ -35,15 +45,13 @@ class MeasurementViewset(BaseViewset):
 
         # Grab the parameters from the HTTP request
         sensor_id        = self.request.query_params.get('sensor')
-        device_id        = self.request.query_params.get('device')
         last_recieved_id = self.request.query_params.get('last_received')
-        
+
         # Apply the filters only if the params exist and are not all
         if (sensor_id and sensor_id != 'all'):
             queryset = queryset.filter(sensor = sensor_id)
 
-        if (device_id and device_id != 'all'):
-            queryset = queryset.filter(device = device_id)
+        queryset = self.filterDevice(queryset)
 
 
         # Only return values that were added since the last_recieve_time
@@ -78,11 +86,6 @@ class LocationViewset(BaseViewset):
     def get_queryset(self):
         queryset = Location.objects.all()
 
-        # Grab the parameters from the HTTP request
-        device_id = self.request.query_params.get('device')
-        
-        # Apply the filters only if the params exist and are not all
-        if (device_id and device_id != 'all'):
-            queryset = queryset.filter(device = device_id)
+        queryset = self.filterDevice(queryset)
 
         return queryset.order_by("datetime")
