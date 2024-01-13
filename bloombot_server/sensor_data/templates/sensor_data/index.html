@@ -98,7 +98,6 @@
           Manages calls to the API and data parsing.
         {% endcomment %}
         endpoint = "http://{{ request.get_host }}/api/measurements/"; // TODO: Needs cleanup
-        console.log(endpoint);
         handler  = new MeasurementDataHandler(endpoint, new_data_callback);
 
         {% comment %} 
