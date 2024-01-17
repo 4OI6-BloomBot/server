@@ -17,6 +17,7 @@ class MeasurementSerializer(serializers.ModelSerializer):
       'id',
       'device',
       'sensor',
+      'location',
       'value',
       'datetime'
     )
