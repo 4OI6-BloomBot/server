@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls    import path, include
 
 urlpatterns = [
-    path('admin/',    admin.site.urls),
-    path('devices/',  include('devices.urls')),
-    path('samples/',  include('sensor_data.urls')),
-    path('location/', include('location.urls')),
-    path('api/',      include('api.urls'))
+    path('admin/',     admin.site.urls),
+    path('devices/',   include('devices.urls')),
+    path('samples/',   include('sensor_data.urls')),
+    path('location/',  include('location.urls')),
+    path('api/',       include('api.urls')),
+
+    path('tz_detect/', include('tz_detect.urls')),
 ]
