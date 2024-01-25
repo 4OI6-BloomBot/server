@@ -9,13 +9,12 @@
 {% load static %}
 
 {% block content %}
-    {% if device_location_list %}
+    {% if location_json %}
 
         {% comment %} Map {% endcomment %}
         <div class="row gx-0 rounded shadow-sm" style="height: 500px; overflow: hidden;">
-            <div id="map"></div>
+            {% include "location/map.html" with location_json=location_json %}
         </div>
-
 
         {% comment %} List of locations {% endcomment %}
         <div class="row mt-3">
@@ -30,23 +29,6 @@
                         <th></th>
                     </tr>
                 </thead>
-          
-                {% for key, location_list in device_location_list.items %}
-                    {% with location_list|last as last_location %}
-                    <tr>
-                        {% comment %} If device name is not set, default to hwID {% endcomment %}
-                        {% if last_location.device.name %}
-                            <td>{{ last_location.device.name }}</td>
-                        {% else %}
-                            <td>{{ last_location.device.hwID }}</td>
-                        {% endif %}
-                        <td>{{ last_location.latitude }}</td>
-                        <td>{{ last_location.longitude }}</td>
-                        <td>{{ last_location.datetime }}</td>
-                        <td><a href="{% url 'devices:detail'  last_location.device.id %}"><button class="btn btn-sm btn-outline-primary">Details</button></a></td>
-                    </tr>
-                    {% endwith %}
-                {% endfor %}
             </table>
       </div>
     {% else %}
@@ -56,63 +38,42 @@
 {% endblock %}
 
 {% block js %}
-    {% comment %} Leaflet (maps) {% endcomment %}
-    <script src="{% static './libraries/leaflet/leaflet-src.js' %}"></script>
-    
-    {% comment %} 
-      TODO: This map code is duplicated in location/map.html. Should update this
-            page to include the map.html component.
-    {% endcomment %}
     <script>
         {% comment %} Convert HTML table to DataTable {% endcomment %}
-        new DataTable("#location_table");        
+        var table = new DataTable("#location_table", {
+          columns: [
+            { 
+              data:   "device",
+              render: function(data) {
+                // TODO: Should be server side? 
+                // TODO: Link should not be static.
+                device_link = "{{ request.get_host }}/devices/" + data.id;
 
-        {% comment %} 
-          Create map and add tiles 
-          TODO: Should set position to include all points.
-        {% endcomment %}
-        var map = L.map('map').setView([43.262071, -79.918834], 13);
+                // If the device name is not set, default to the hwID
+                // TODO: Links need cleanup
+                if (!data.name)
+                  return "<a href='http://" + device_link + "'>" + data.id + "</a>";
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom:      19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+                return "<a href='http://" + device_link + "'>" + data.name + "</a>";
+              }
+            },
+            { 
+              data:   "latitude",
+            },
+            { 
+              data:   "longitude",
+            },
+            // TODO: Needs to be formatted properly
+            { data: "datetime" }
+          ]
+        });        
 
+        var location_json = {% autoescape off %}{{ location_json }}{% endautoescape %};     
 
-        {% comment %}
-            Iterate over each device and add its location history to the map
-            TODO: Should make methods to clean this up.
-        {% endcomment %}
-        var marker, position, circle, popup_text;
+        // Update table
+        table.rows.add(location_json);
+        table.draw();
         
-        {% for key, location_list in device_location_list.items %}
-            var line = [];
-
-            {% for location in location_list %}
-                position   = [{{ location.latitude }}, {{ location.longitude }}];
-                popup_text = "<a href='{% url 'devices:detail' location.device.id %}'>{{ location.device.name }}</a><br/>{{ location.datetime }}";
-
-                circle = L.circle(position, {
-                    color:      'white',
-                    fillColor:  'yellow',
-                    fillOpacity: 0.5,
-                    radius:      10     // TODO: Should be relative to accuracy
-                });
-
-                circle.bindPopup(popup_text);
-                circle.addTo(map);
-
-                line.push(position);
-            {% endfor %}
-
-            {% comment %} Add a pin for the last location {% endcomment %}
-            marker = L.marker(position);
-            marker.bindPopup(popup_text);
-            marker.addTo(map);
-
-            {% comment %} Connect the points for the device path {% endcomment %}
-            L.polyline(line).addTo(map);
-        {% endfor %}
 
     </script>
 {% endblock %}

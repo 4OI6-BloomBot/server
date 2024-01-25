@@ -1,7 +1,14 @@
-from django.views import generic
+from   django.views                 import generic
+from   django.core.serializers.json import DjangoJSONEncoder
+import json
 
 # Add model import
 from .models import Location
+
+# Add serializer for location
+# TODO: Probably should have defined the serializers in each of the apps instead of
+#       in the API.
+from api.serializers.location_serializer import LocationSerializer
 
 
 # ==========================================
@@ -9,7 +16,7 @@ from .models import Location
 # ==========================================
 class IndexView(generic.ListView):
     template_name       = "location/index.html"
-    context_object_name = "device_location_list"
+    context_object_name = "location_json"
 
     # Add the base template data
     def get_context_data(self, *args, **kwargs):
@@ -22,14 +29,9 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         data = Location.objects.order_by('device', 'datetime')
+        ser  = LocationSerializer(data, many = True)
 
-        data_sorted = {}
-        for location in data.all():
-            if location.device.id not in data_sorted:
-                data_sorted[location.device.id] = []
-            data_sorted[location.device.id].append(location)
-
-        return data_sorted
+        return json.dumps(ser.data)
     
 
 # ======================================================
@@ -38,7 +40,14 @@ class IndexView(generic.ListView):
 # of the device are returned instead.
 # ======================================================
 def getDeviceLocations(pk = None):
+    # Determine the query to run
     if pk is None:
-      return Location.objects.order_by('device', '-datetime').distinct('device')
-
-    return Location.objects.filter(device = pk).order_by('datetime') 
+      locations = Location.objects.order_by('device', '-datetime').distinct('device')
+    else:
+      locations = Location.objects.filter(device = pk).order_by('datetime') 
+    
+    # Serialize the data
+    ser = LocationSerializer(locations, many = True)
+    
+    # Parse as JSON and return
+    return json.dumps(ser.data)

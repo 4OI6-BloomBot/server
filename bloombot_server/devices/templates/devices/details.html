@@ -49,9 +49,9 @@
         
 
         {% comment %} Map showing the location history of the device {% endcomment %}
-        {% if device_location_list %}
+        {% if location_json %}
           <div class="col-4 rounded mx-5 shadow-sm" style="height: 350px; overflow: hidden;">
-              {% include "location/map.html" with location_list=device_location_list connect_points=1 %}
+              {% include "location/map.html" with location_json=location_json %}
           </div>
         {% endif %}
     </div>
