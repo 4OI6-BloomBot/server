@@ -10,37 +10,39 @@
 
     {% comment %} Map showing the location of each device {% endcomment %}
     {% if device_location_list %}
-      <div class="row gx-0 rounded shadow-sm" style="height: 350px; overflow: hidden;">
-          {% include "location/map.html" with location_list=device_location_list all_pins=1 %}
-      </div>
+        <div class="row gx-0 rounded shadow-sm" style="height: 350px; overflow: hidden;">
+            {% include "location/map.html" with location_list=device_location_list all_pins=1 %}
+        </div>
     {% endif %}
 
     <div class="row mt-4 gx-0 rounded" style="overflow: hidden;">
         {% if device_list %}
             <table id="devices_table" class="table">
-              {% comment %} Table headers {% endcomment %}
-              <thead>
-                  <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Hardware ID</th>
-                      <th scope="col">Last Seen</th>
-                      <th scope="col">{# Actions #}</th>
-                  </tr>
-              </thead>
+                {% comment %} Table headers {% endcomment %}
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Hardware ID</th>
+                        <th scope="col">Last Seen</th>
+                        <th scope="col">{# Actions #}</th>
+                    </tr>
+                </thead>
 
-              {% for device in device_list %}
-                  <tr>
-                      <td>{{ device.name }}</td>
-                      <td>{{ device.hwID }}</td>
-                      <td>{{ device.lastSeen }}</td>
-                      <td>
+                {% for device in device_list %}
+                <tr>
+                    <td>{{ device.name }}</td>
+                    <td>{{ device.hwID }}</td>
+                    <td>{{ device.lastSeen }}</td>
+                    <td>
                         <a href="{% url 'devices:detail'  device.id %}"><button class="btn btn-sm btn-outline-primary">Details</button></a>
-                      </td>
-                  </tr>
-              {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
             </table>
 
+            {% comment %} Link to location history page (all devices) {% endcomment %}
             <a href="{% url 'location:index' %}"><button class="btn btn-primary">All device history</button></a>
+        
         {% else %}
             <p>No devices are available.</p>
         {% endif %}
