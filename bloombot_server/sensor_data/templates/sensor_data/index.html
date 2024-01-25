@@ -8,26 +8,35 @@
 {% endcomment %}
 
 {% block content %}
-    {% comment %} TODO: Don't really need to pass any measurement data to this anymore {% endcomment %}
-    {% if measurement_list %} 
-        <div style="width: 800px;"><canvas id="sensor_chart"></canvas></div>
 
-        <table id="measurement_table" class="table">
-            {% comment %} Table headers {% endcomment %}
-            <thead>
-                <tr>
-                    <th scope="col">Device</th>
-                    <th scope="col">Sensor Type</th>
-                    <th scope="col">Value</th>
-                    <th scope="col">Unit</th>
-                    <th scope="col">Timestamp</th>
-                </tr>
-            </thead>
-        </table>
-    {% else %}
-        <p>No measurements are available.</p>
-    {% endif %}
+    {% comment %}
+      Plot canvas
+      TODO: Shoudld not have a static size.   
+    {% endcomment %}
+    <div style="width: 800px;">
+        <canvas id="sensor_chart"></canvas>
+    </div>
 
+    {% comment %} 
+      Table of measurements
+    {% endcomment %}
+    <table id="measurement_table" class="table">
+        {% comment %} Table headers {% endcomment %}
+        <thead>
+            <tr>
+                <th scope="col">Device</th>
+                <th scope="col">Sensor Type</th>
+                <th scope="col">Value</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Timestamp</th>
+            </tr>
+        </thead>
+    </table>
+
+    {% comment %}
+      Filters for the query
+      TODO: Need to update the styling (always blue buttons currently)
+    {% endcomment %}
     {% if sensor_list %}
         <button class="btn btn-primary" onclick="setSensorID(null)">All</button>
         {% for sensor in sensor_list %}
@@ -47,36 +56,36 @@
         {% comment %}
           Declare the table and table data array
         {% endcomment %}
-        table      = new DataTable("#measurement_table", {
-                        columns: [
-                          { 
-                            data:   "device",
-                            render: function(data) {
-                              // TODO: Should be server side? 
-                              // TODO: Link should not be static.
-                              device_link = "{{ request.get_host }}/devices/" + data.id;
-                              return "<a href='http://" + device_link + "'>" + data.name + "</a>"; // TODO: Needs cleanup
-                            }
-                          },
-                          { 
-                            data:   "sensor",
-                            render: function(data) {
-                              return data.name;
-                            }
-                          },
-                          { 
-                            data:   "value",
-                          },
-                          {
-                            unit: "unit", 
-                            render: function(data, type, row, meta) {
-                              return row.sensor.unit; 
-                            }
-                          },
-                          // TODO: Needs to be formatted properly
-                          { data: "datetime" }
-                        ]
-                      });
+        table = new DataTable("#measurement_table", {
+                      columns: [
+                        { 
+                          data:   "device",
+                          render: function(data) {
+                            // TODO: Should be server side? 
+                            // TODO: Link should not be static.
+                            device_link = "{{ request.get_host }}/devices/" + data.id;
+                            return "<a href='http://" + device_link + "'>" + data.name + "</a>"; // TODO: Needs cleanup
+                          }
+                        },
+                        { 
+                          data:   "sensor",
+                          render: function(data) {
+                            return data.name;
+                          }
+                        },
+                        { 
+                          data:   "value",
+                        },
+                        {
+                          unit: "unit", 
+                          render: function(data, type, row, meta) {
+                            return row.sensor.unit; 
+                          }
+                        },
+                        // TODO: Needs to be formatted properly
+                        { data: "datetime" }
+                      ]
+                    });
 
 
         {% comment %} 
