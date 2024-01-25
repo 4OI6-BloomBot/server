@@ -30,7 +30,12 @@
 
                 {% for device in device_list %}
                 <tr>
-                    <td>{{ device.name }}</td>
+                    {% comment %} If device name is not set, default to hwID {% endcomment %}
+                    {% if device.name %}
+                        <td>{{ device.name }}</td>
+                    {% else %}
+                        <td>{{ device.hwID }}</td>
+                    {% endif %}
                     <td>{{ device.hwID }}</td>
                     <td>{{ device.lastSeen }}</td>
                     <td>

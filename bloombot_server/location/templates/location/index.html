@@ -34,7 +34,12 @@
                 {% for key, location_list in device_location_list.items %}
                     {% with location_list|last as last_location %}
                     <tr>
-                        <td>{{ last_location.device.name }}</td>
+                        {% comment %} If device name is not set, default to hwID {% endcomment %}
+                        {% if last_location.device.name %}
+                            <td>{{ last_location.device.name }}</td>
+                        {% else %}
+                            <td>{{ last_location.device.hwID }}</td>
+                        {% endif %}
                         <td>{{ last_location.latitude }}</td>
                         <td>{{ last_location.longitude }}</td>
                         <td>{{ last_location.datetime }}</td>

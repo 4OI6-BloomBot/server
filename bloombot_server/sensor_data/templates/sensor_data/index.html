@@ -66,7 +66,13 @@
                             // TODO: Should be server side? 
                             // TODO: Link should not be static.
                             device_link = "{{ request.get_host }}/devices/" + data.id;
-                            return "<a href='http://" + device_link + "'>" + data.name + "</a>"; // TODO: Needs cleanup
+                            
+                            // If the device name is not set, default to the hwID
+                            // TODO: Links need cleanup
+                            if (!data.name)
+                              return "<a href='http://" + device_link + "'>" + data.id + "</a>";
+
+                            return "<a href='http://" + device_link + "'>" + data.name + "</a>";
                           }
                         },
                         { 
