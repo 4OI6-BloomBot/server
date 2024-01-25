@@ -61,11 +61,11 @@ class MeasurementDataHandler {
           // Update the last received ID
           // Request data is ordered by received time
           self.last_received_id = d[d.length - 1].id;
-
-          // Trigger the callback function with the new
-          // raw data.
-          self.callback_fn(d);
         }
+
+        // Trigger the callback function with the new
+        // data.
+        self.callback_fn(d);
       }
     });
   }

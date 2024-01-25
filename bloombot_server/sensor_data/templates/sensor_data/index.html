@@ -126,15 +126,13 @@
           table.rows.add(d);
           table.draw();
 
-          // Update chart
           chart.data.datasets = handler.device_datasets;
           chart.update();
         }
-      
 
         {% comment %} 
           Update the sensor ID in the handler.
-          Clear the table data to prep for new values.
+          Clear the table & chart data to prep for new values.
         {% endcomment %}
         function setSensorID(id) {
           table.clear();
