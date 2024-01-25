@@ -38,10 +38,13 @@
                 {% endcomment %}
                 <nav class="col-2 text-white bg-dark" style="height:100vh;">
                     <div class="p-3">
+                        {% comment %} Navbar title {% endcomment %}
                         <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                             <span class="fs-4">BloomBot</span>
                         </a>
                         <hr/>
+
+                        {% comment %} Navbar pill links {% endcomment %}
                         <ul class="nav nav-pills flex-column mb-auto">
                             <li>
                                 <a href="#" class="nav-link text-white">
@@ -73,6 +76,7 @@
                                     <p class="text fs-2">{{ page_title|title }}</p>
                                 </div>
                             {% endif %}
+                            
                             {% block    content %}
                             {% endblock content %}
                         </div>
