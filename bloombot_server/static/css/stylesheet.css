@@ -1,0 +1,11 @@
+/* 
+  Base stylesheet for all pages of the project
+*/
+
+body {
+    background-color: #eeeeee;
+}
+
+.nav-pills .nav-link:hover {
+    background-color: #343a40;
+}
