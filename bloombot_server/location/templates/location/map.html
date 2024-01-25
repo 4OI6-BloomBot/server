@@ -80,7 +80,7 @@
           TODO: Need to fix link. Need to fix time formatting.
         {% endcomment %}
         function getPopup(device, location) {
-            return "<a href='{{ request.get_host }}/devices/" + device.id + "'>" + device.name + "</a><br/>" + location.datetime;
+            return "<a href='http://{{ request.get_host }}/devices/" + device.id + "'>" + device.name + "</a><br/>" + location.datetime;
         }
 
         {% comment %} 
