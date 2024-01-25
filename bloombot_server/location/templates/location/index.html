@@ -11,13 +11,15 @@
 {% block content %}
     {% if device_location_list %}
 
+        {% comment %} Map {% endcomment %}
         <div class="row gx-0 rounded shadow-sm" style="height: 500px; overflow: hidden;">
             <div id="map"></div>
         </div>
 
 
+        {% comment %} List of locations {% endcomment %}
         <div class="row mt-3">
-            <table id="measurement_table" class="table">
+            <table id="location_table" class="table">
                 {% comment %} Table headers {% endcomment %}
                 <thead>
                     <tr>
@@ -32,7 +34,12 @@
                 {% for key, location_list in device_location_list.items %}
                     {% with location_list|last as last_location %}
                     <tr>
-                        <td>{{ last_location.device.name }}</td>
+                        {% comment %} If device name is not set, default to hwID {% endcomment %}
+                        {% if last_location.device.name %}
+                            <td>{{ last_location.device.name }}</td>
+                        {% else %}
+                            <td>{{ last_location.device.hwID }}</td>
+                        {% endif %}
                         <td>{{ last_location.latitude }}</td>
                         <td>{{ last_location.longitude }}</td>
                         <td>{{ last_location.datetime }}</td>
@@ -52,21 +59,29 @@
     {% comment %} Leaflet (maps) {% endcomment %}
     <script src="{% static './libraries/leaflet/leaflet-src.js' %}"></script>
     
+    {% comment %} 
+      TODO: This map code is duplicated in location/map.html. Should update this
+            page to include the map.html component.
+    {% endcomment %}
     <script>
-        new DataTable("#measurement_table");        
+        {% comment %} Convert HTML table to DataTable {% endcomment %}
+        new DataTable("#location_table");        
 
-
-        {% comment %} Create map and add tiles {% endcomment %}
+        {% comment %} 
+          Create map and add tiles 
+          TODO: Should set position to include all points.
+        {% endcomment %}
         var map = L.map('map').setView([43.262071, -79.918834], 13);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom:      19,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom:      19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
 
         {% comment %}
             Iterate over each device and add its location history to the map
+            TODO: Should make methods to clean this up.
         {% endcomment %}
         var marker, position, circle, popup_text;
         
@@ -78,10 +93,10 @@
                 popup_text = "<a href='{% url 'devices:detail' location.device.id %}'>{{ location.device.name }}</a><br/>{{ location.datetime }}";
 
                 circle = L.circle(position, {
-                  color:      'white',
-                  fillColor:  'yellow',
-                  fillOpacity: 0.5,
-                  radius:      10     // TODO: Should be relative to accuracy
+                    color:      'white',
+                    fillColor:  'yellow',
+                    fillOpacity: 0.5,
+                    radius:      10     // TODO: Should be relative to accuracy
                 });
 
                 circle.bindPopup(popup_text);

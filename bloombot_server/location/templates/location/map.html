@@ -18,16 +18,22 @@
   <script src="{% static './libraries/leaflet/leaflet-src.js' %}"></script>
 
   <script>
-      {% comment %} Create map and add tiles {% endcomment %}
+      {% comment %} 
+          Create map and add tiles 
+          TODO: Should set position to include all points.
+      {% endcomment %}
       var map = L.map('map').setView([43.262071, -79.918834], 13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom:      19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          maxZoom:      19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
 
 
-      {% comment %} Iterate over locations and add to map {% endcomment %}
+      {% comment %}
+            Iterate over locations and add to map
+            TODO: Should make methods to clean this up.
+      {% endcomment %}
       var marker, position, circle, popup_text;
       var line = [];
       
@@ -36,10 +42,10 @@
           popup_text = "<a href='{% url 'devices:detail' location.device.id %}'>{{ location.device.name }}</a><br/>{{ location.datetime }}";
 
           circle = L.circle(position, {
-            color:      'white',
-            fillColor:  'yellow',
-            fillOpacity: 0.5,
-            radius:      10     // TODO: Should be relative to accuracy
+              color:      'white',
+              fillColor:  'yellow',
+              fillOpacity: 0.5,
+              radius:      10     // TODO: Should be relative to accuracy
           });
 
 
@@ -48,16 +54,14 @@
               Do not add the popup to the circles if pins exist.
           {% endcomment %}
           {% if all_pins %}
-            marker = L.marker(position);
-            marker.bindPopup(popup_text);
-            marker.addTo(map);
+              marker = L.marker(position);
+              marker.bindPopup(popup_text);
+              marker.addTo(map);
           {% else %}
-            circle.bindPopup(popup_text);
+              circle.bindPopup(popup_text);
           {% endif %}
 
           circle.addTo(map);
-
-          
 
           line.push(position);
       {% endfor %}

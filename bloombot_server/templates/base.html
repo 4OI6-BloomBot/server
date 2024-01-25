@@ -7,95 +7,50 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>BloomBot - {{page_title|title}}</title>  
-    
-        {% comment %} Bootstrap CSS import {% endcomment %}
-        <link href="{% static './libraries/bootstrap-5.3.2-dist/css/bootstrap.css' %}" rel="stylesheet">
-        <link href="{% static './libraries/bootstrap-5.3.2-dist/bootstrap-icons-1.11.2/font/bootstrap-icons.min.css' %}" rel="stylesheet">
-        
-        {% comment %} 
-          Datatables for enhanced HTML tables 
-          TODO: Should really only load this on pages that actually need it.
-        {% endcomment %}
-        <link href="{% static './libraries/DataTables/datatables.min.css' %}" rel="stylesheet">
-
-
-        {% comment %} 
-          Leaflet (maps)
-          TODO: Should really only load this on pages that actually need it.
-        {% endcomment %}
-        <link href="{% static './libraries/leaflet/leaflet.css' %}" rel="stylesheet"/>
-
-    </head>
+    {% include "head.html" %}
 
     <body>
         <div class="container-fluid p-0">
-          <div class="row gx-0">
+            <div class="row gx-0">
       
-        {% comment %}
-          Navbar
-        {% endcomment %}
-        <nav class="col-2 text-white bg-dark" style="height:100vh;">
-            <div class="p-3">
-                <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-4">BloomBot</span>
-                </a>
-                <hr/>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <i class="bi me-2 bi-speedometer2"></i> Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'devices:index' %}" class="nav-link mt-1 text-white {% if page_category == 'device' %}active{% endif %}">
-                            <i class="bi me-2 bi-cursor"></i> Devices
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'sensor_data:index' %}" class="nav-link mt-1 text-white {% if page_category == 'sensor_data' %}active{% endif %}">
-                            <i class="bi me-2 bi-clipboard-data"></i> Sensor Data
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                {% comment %}
+                  Navbar
+                {% endcomment %}
+                {% include "navbar.html" %}
 
-        {% comment %} 
-            Page content and title
-        {% endcomment %}
-        <div class="col-10">
-            <div class="container-fluid m-0 pt-4">
-                <div class="container-fluid ps-3 m-0">
-                    {% if page_title %}
-                        <div class="row gx-0 mb-3">
-                            <p class="text fs-2">{{ page_title|title }}</p>
+                {% comment %} 
+                    Page content and title
+                {% endcomment %}
+                <div class="col-10">
+                    <div class="container-fluid m-0 pt-4">
+                        <div class="container-fluid ps-3 m-0">
+                            {% if page_title %}
+                                <div class="row gx-0 mb-3">
+                                    <p class="text fs-2">{{ page_title|title }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% block    content %}
+                            {% endblock content %}
                         </div>
-                    {% endif %}
-                    {% block    content %}
-                    {% endblock content %}
+                    </div>
                 </div>
             </div>
+
+            {% include "footer.html" %}
         </div>
-      </div>
-      </div>
 
 
-      {% comment %} Timezone Detection {% endcomment %}
-      {% load tz_detect %}
-      {% tz_detect %}
+        {% comment %} 
+          Timezone Detection 
+        {% endcomment %}
+        {% load tz_detect %}
+        {% tz_detect %}
     </body>
 
-    <style>
-        body {
-          background-color: #eeeeee;
-        }
-
-        .nav-pills .nav-link:hover {
-            background-color: #343a40;
-        }
-    </style>
+    {% comment %} 
+      JS Script Imports
+    {% endcomment %}
 
     {% comment %} Bootstrap JS Import {% endcomment %}
     <script src="{% static './libraries/bootstrap-5.3.2-dist/js/bootstrap.bundle.min.js' %}"></script>
@@ -104,6 +59,10 @@
     <script src="{% static './libraries/jQuery/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static './libraries/DataTables/datatables.min.js' %}"></script>
 
+    {% comment %} 
+      Custom JS 
+      TODO: This should be restructured.
+    {% endcomment %}
     {% block    js %}
     {% endblock js %}
 

@@ -2,52 +2,48 @@
 
 {% comment %}
     Displays the details of a given device
-    TODO: Can probably abstract the list part of the template and extend it for
-          each list component in the project
 {% endcomment %}
 
 {% block content %}
 
-    <div class="row">
-        <p class="text fs-2">Edit {{ device.name }}</p>
-    </div>
-
     <div class="row gx-0">
        
         <form 
-          action = "{% url 'devices:edit' device.id %}"   
-          method = "post"
-          class  = "col-7 rounded bg-light mb-auto p-3"
+            action = "{% url 'devices:edit' device.id %}"   
+            method = "post"
+            class  = "col-7 rounded bg-light mb-auto p-3"
         >
             {% csrf_token %}
 
             <fieldset>
-              {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+                {% if error_message %}<p>{{ error_message }}</p>{% endif %}
 
-              <label for="name" class="form-label">Name:</label>
-              <input 
-                type  = "text"
-                name  = "name"
-                value = "{{ device.name }}"
-                class = "form-control"
-              >
+                {% comment %} Friendly name {% endcomment %}
+                <label for="name" class="form-label">Name:</label>
+                <input 
+                    type  = "text"
+                    name  = "name"
+                    value = "{{ device.name }}"
+                    class = "form-control"
+                >
 
-              <label for="hwID" class="form-label mt-3">Hardware ID:</label>
-              <input 
-                type  = "text"
-                name  = "hwID"
-                value = "{{ device.hwID }}"
-                class = "form-control"
-                readonly
-                disabled
-              >
-
+                {% comment %} Hardware ID (immutable) {% endcomment %}
+                <label for="hwID" class="form-label mt-3">Hardware ID:</label>
+                <input 
+                    type  = "text"
+                    name  = "hwID"
+                    value = "{{ device.hwID }}"
+                    class = "form-control"
+                    readonly
+                    disabled
+                >
             </fieldset>
 
+            {% comment %} Submit button {% endcomment %}
             <input 
-              type  = "submit"
-              class = "btn btn-primary mt-5"
-              value = "Save"
+                type  = "submit"
+                class = "btn btn-primary mt-5"
+                value = "Save"
             >
         </form>
         
