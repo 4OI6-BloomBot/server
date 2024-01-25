@@ -19,7 +19,7 @@ class IndexView(generic.ListView):
     # Add the device locations to the passed arguments
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
-        context['device_location_list'] = getDeviceLocations()
+        context['location_json'] = getDeviceLocations()
 
         # Add the page type for nav
         context['page_category'] = "device"
@@ -41,7 +41,7 @@ class DetailView(generic.DetailView):
     # Add the device locations to the passed arguments
     def get_context_data(self, *args, **kwargs):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
-        context['device_location_list'] = getDeviceLocations(self.kwargs['pk'])
+        context['location_json'] = getDeviceLocations(self.kwargs['pk'])
 
         # Add the page data for base template
         context['page_category'] = "device"
