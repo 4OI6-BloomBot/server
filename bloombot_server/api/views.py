@@ -1,8 +1,10 @@
-from rest_framework                      import viewsets, mixins
-from .models                             import Measurement, Location
+from rest_framework                      import viewsets, mixins, generics
+from .models                             import Measurement, Location, Device
 from .serializers.measurement_serializer import MeasurementSerializer
 from .serializers.location_serializer    import LocationSerializer
+from .serializers.config_serializer      import ConfigSerializer
 from django.utils                        import timezone
+from django.shortcuts                    import get_object_or_404
 from datetime                            import timedelta
 
 
@@ -89,3 +91,41 @@ class LocationViewset(BaseViewset):
         queryset = self.filterDevice(queryset)
 
         return queryset.order_by("datetime")
+    
+
+
+# ======================================================
+# Config data view set.
+# Handles API access to the config data model. 
+# ======================================================
+class ConfigGet(generics.RetrieveAPIView):
+    # Define queryset & serializer
+    queryset         = Device.objects.all()
+    serializer_class = ConfigSerializer
+
+    # ===============================================
+    # Return the config object instead of the device
+    # Note: This is unchanged from the definition, 
+    #       had to override method to return the 
+    #       config from the device object.
+    # ===============================================
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Perform the lookup filtering.
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        assert lookup_url_kwarg in self.kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj.config
