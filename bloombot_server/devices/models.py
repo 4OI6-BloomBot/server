@@ -15,6 +15,11 @@ class Config(models.Model):
   # Temperature threshold
   temp_thresh = models.FloatField()
 
+
+  # =====================================================
+  # Get the default object ID from the DB. Create it if
+  # it does not already exist.
+  # =====================================================
   @classmethod
   def getDefault(cls):
      config, created = cls.objects.get_or_create(
@@ -25,6 +30,17 @@ class Config(models.Model):
      )
 
      return config.pk
+
+
+  # ====================================================
+  # Override to string method to return the given name
+  # Return the pk if no name is given
+  # ====================================================
+  def __str__(self):
+      if (len(self.name) == 0):
+          return "Config - " + str(self.pk)
+      
+      return self.name
 
 
 
