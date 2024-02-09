@@ -15,5 +15,5 @@ app_name    = 'api' # Register namespace
 urlpatterns = [
     path("",                  include(router.urls)),
     path("api-auth/",         include("rest_framework.urls")),
-    path("config/<int:pk>",   views.ConfigGet.as_view())
+    path("config/<int:hwID>", views.ConfigGet.as_view())
 ]

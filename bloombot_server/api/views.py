@@ -102,6 +102,7 @@ class ConfigGet(generics.RetrieveAPIView):
     # Define queryset & serializer
     queryset         = Device.objects.all()
     serializer_class = ConfigSerializer
+    lookup_field     = "hwID"
 
     # ===============================================
     # Return the config object instead of the device
