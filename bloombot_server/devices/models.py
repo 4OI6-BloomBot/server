@@ -12,8 +12,11 @@ class Config(models.Model):
           unique     = True
         )
   
-  # Temperature threshold
-  temp_thresh = models.FloatField()
+  # Detection thresholds
+  tempThresh      = models.FloatField()
+  deltaTurbThresh = models.FloatField()
+  deltaTempThresh = models.FloatField()
+  fluoroThresh    = models.FloatField()
 
 
   # =====================================================
@@ -25,7 +28,10 @@ class Config(models.Model):
      config, created = cls.objects.get_or_create(
         name     = "Default",
         defaults = {
-          "temp_thresh" : 25.0
+          "tempThresh"      : 25.0,
+          "deltaTurbThresh" : 0.0,
+          "deltaTempThresh" : 0.5,
+          "fluoroThresh"    : 3
         }
      )
 
