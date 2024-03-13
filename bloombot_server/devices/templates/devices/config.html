@@ -1,0 +1,164 @@
+{% comment %}
+    Displays a configuration and allows for edits
+{% endcomment %}
+{% load static %}
+
+{% block config %}
+    <form 
+        method = "post"
+        class  = "rounded bg-light mb-auto p-3"
+    
+        {% if deviceConfSet %}
+          action = "{% url 'devices:setConf' device.id %}"
+        {% endif %}  
+    >
+        {% csrf_token %}
+
+        <fieldset>
+            {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+
+            {% comment %} Send the given name for the post request {% endcomment %}
+            <input 
+                name  = "prefix"
+                value = "{{name}}"
+                style = "display: none;"
+            >
+
+            {% comment %} Friendly name {% endcomment %}
+            <label for="{{name}}configName" class="form-label">Configuration:</label>
+            <select 
+                name  = "{{name}}configName"
+                class = "form-select"
+                id    = "{{name}}confSelect"
+                
+                {% if staticSet %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.name}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.name }}</option>
+                {% endfor %}
+            </select>
+
+            {% comment %} Configuration params {% endcomment %}
+            <label for="{{name}}tempThresh" class="form-label mt-3">Temperature Threshold (°C)</label>
+            <select 
+                name  = "{{name}}tempThresh"
+                class = "form-select"
+                id    = "{{name}}confTempThresh"
+
+                {% if staticSet or readOnly %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.tempThresh}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.tempThresh }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="{{name}}deltaTempThresh" class="form-label mt-3">Temperature Delta Threshold (°C)</label>
+            <select 
+                name  = "{{name}}deltaTempThresh"
+                class = "form-select"
+                id    = "{{name}}confDeltaTempThresh"
+
+                {% if staticSet or readOnly %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.deltaTempThresh}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.deltaTempThresh }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="{{name}}deltaTurbThresh" class="form-label mt-3">Turbidity Delta Threshold (???)</label>
+            <select 
+                name  = "{{name}}deltaTurbThresh"
+                class = "form-select"
+                id    = "{{name}}confDeltaTurbThresh"
+
+                {% if staticSet or readOnly %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.deltaTurbThresh}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.deltaTurbThresh }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="{{name}}fluoroThresh" class="form-label mt-3">Fluorometer Threshold (??)</label>
+            <select 
+                name  = "{{name}}fluoroThresh"
+                class = "form-select"
+                id    = "{{name}}confFluoroThresh"
+
+                {% if staticSet or readOnly %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.fluoroThresh}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.fluoroThresh }}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+
+        {% comment %} Submit button {% endcomment %}
+        {% if deviceConfSet %}
+          <input 
+              type  = "submit"
+              class = "btn btn-primary mt-5"
+              value = "Apply Configuration"
+          >
+        {% endif %}
+    </form>
+
+    <script src="{% static './libraries/jQuery/jquery-3.7.1.min.js' %}"></script>
+    <script>
+      $(document).ready(function(){
+  
+        var config          = $("#{{name}}confSelect");
+        var tempThresh      = $("#{{name}}confTempThresh");
+        var deltaTempThresh = $("#{{name}}confDeltaTempThresh");
+        var deltaTurbThresh = $("#{{name}}confDeltaTurbThresh");
+        var fluoroThresh    = $("#{{name}}confFluoroThresh");
+
+        var $tempThreshOptions      = tempThresh.find('option');
+        var $deltaTempThreshOptions = deltaTempThresh.find('option');
+        var $deltaTurbThreshOptions = deltaTurbThresh.find('option');
+        var $fluoroThreshOptions    = fluoroThresh.find('option');
+
+        config.on('change',function(){
+          var valStr = '[value="'+ this.value  +'"]';
+
+          tempThresh.html($tempThreshOptions.filter(valStr));
+          deltaTempThresh.html($deltaTempThreshOptions.filter(valStr));
+          deltaTurbThresh.html($deltaTurbThreshOptions.filter(valStr));
+          fluoroThresh.html($fluoroThreshOptions.filter(valStr));
+        }).trigger('change'); 
+        
+        
+      }); 
+    </script>
+{% endblock %}

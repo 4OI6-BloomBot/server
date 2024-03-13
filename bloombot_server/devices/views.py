@@ -5,7 +5,7 @@ from django.views     import generic
 from django.urls      import reverse
 
 # Add model import
-from .models        import Device
+from .models        import Device, Config
 from location.views import getDeviceLocations
 
 
@@ -43,9 +43,12 @@ class DetailView(generic.DetailView):
         context = super(DetailView, self).get_context_data(*args, **kwargs)
         context['location_json'] = getDeviceLocations(self.kwargs['pk'])
 
+        # Add the config options
+        context['configs']  = getConfigs()
+
         # Add the page data for base template
         context['page_category'] = "device"
-        context['page_title']    = self.object.name
+        context['page_title']    = str(self.object)
 
         return context
 
@@ -69,3 +72,61 @@ def edit(request, id):
     return HttpResponseRedirect(reverse("devices:index"))
 
     
+
+# ==========================================
+# Get the details of a config givin its ID
+# ==========================================
+class ConfDetailView(generic.DetailView):
+    template_name = "devices/configDetails.html"
+    model         = Config
+
+    # Add the device locations to the passed arguments
+    def get_context_data(self, *args, **kwargs):
+        context = super(ConfDetailView, self).get_context_data(*args, **kwargs)
+        # context['location_json'] = getDeviceLocations(self.kwargs['pk'])
+
+        # Add the config options
+        # context['configs']  = getConfigs()
+
+        # Add the page data for base template
+        context['page_category'] = "device"
+        context['page_title']    = str(self.object)
+
+        return context
+
+
+# ======================================================
+# Grab the configurations from the database
+# ======================================================
+def getConfigs(pk = None):
+    # Determine the query to run
+    if pk is None:
+      configs = Config.objects.order_by('name')
+    else:
+      configs = Config.objects.filter(pk = pk)
+        
+    # Parse as JSON and return
+    return configs
+
+
+# ==========================================
+# Apply a new config to a specific device
+# ==========================================
+def setConfig(request, id):
+
+    # Get device from ID
+    device = get_object_or_404(Device, pk = id)
+
+    # Get form data
+    namePrefix = request.POST['prefix']
+    confID     = request.POST[namePrefix + 'configName']
+    
+    # Get config item from ID
+    config = get_object_or_404(Config, pk = confID)
+
+    # Update object in DB
+    device.config = config
+    device.save()
+
+    # Redirect back to the device list (TODO: Update redirect)
+    return HttpResponseRedirect(reverse("devices:index"))
