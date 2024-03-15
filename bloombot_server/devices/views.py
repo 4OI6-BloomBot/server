@@ -90,7 +90,8 @@ class ConfDetailView(generic.DetailView):
 
         # Add the page data for base template
         context['page_category'] = "device"
-        context['page_title']    = str(self.object)
+        context['page_title']    = "Edit " + str(self.object)
+        print(context)
 
         return context
 
@@ -108,6 +109,26 @@ def getConfigs(pk = None):
     # Parse as JSON and return
     return configs
 
+
+# ==========================================
+# Edit a config given its ID
+# ==========================================
+def editConfig(request, pk):
+
+    # Get device from ID
+    config = get_object_or_404(Config, pk = pk)
+
+    # Get form data
+    config.name            = request.POST['configName']
+    config.tempThresh      = request.POST['tempThresh']
+    config.deltaTempThresh = request.POST['deltaTempThresh']
+    config.deltaTurbThresh = request.POST['deltaTurbThresh']
+    config.fluoroThresh    = request.POST['fluoroThresh']
+
+    # Update object in DB
+    config.save()
+
+    return HttpResponseRedirect(reverse("devices:index"))
 
 # ==========================================
 # Apply a new config to a specific device

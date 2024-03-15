@@ -12,5 +12,6 @@ urlpatterns = [
     path("<int:pk>/",           views.DetailView.as_view(),     name="detail"),
     path("<int:id>/edit/",      views.edit,                     name="edit"),
     path("<int:id>/conf/",      views.setConfig,                name="setConf"),
-    path("conf/edit/<int:pk>/", views.ConfDetailView.as_view(), name="editConf"),
+    path("conf/<int:pk>/",      views.ConfDetailView.as_view(), name="editConf"),
+    path("conf/edit/<int:pk>/", views.editConfig,               name="updateConf"),
 ]
