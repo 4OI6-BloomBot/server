@@ -131,7 +131,7 @@ def editConfig(request, pk):
     # Update object in DB
     config.save()
 
-    return HttpResponseRedirect(reverse("devices:index"))
+    return HttpResponseRedirect(reverse("devices:confIndex"))
 
 # ==========================================
 # Create a new config object
@@ -147,7 +147,7 @@ def newConfig(request):
         )
     config.save()
 
-    return HttpResponseRedirect(reverse("devices:index"))
+    return HttpResponseRedirect(reverse("devices:confIndex"))
 
 
 # ==========================================
@@ -171,3 +171,24 @@ def setConfig(request, id):
 
     # Redirect back to the device list (TODO: Update redirect)
     return HttpResponseRedirect(reverse("devices:index"))
+
+
+# ==========================================
+# Root of app. Fetch a list of all devices
+# ==========================================
+class configIndex(generic.ListView):
+    template_name       = "devices/configIndex.html"
+    context_object_name = "config_list"
+
+    # Add the device locations to the passed arguments
+    def get_context_data(self, *args, **kwargs):
+        context = super(configIndex, self).get_context_data(*args, **kwargs)
+      
+        # Add the page type for nav
+        context['page_category'] = "device"
+        context['page_title']    = "configurations"
+
+        return context
+
+    def get_queryset(self):
+        return Config.objects.order_by('name')[:10]

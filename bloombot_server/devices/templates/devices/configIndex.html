@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% comment %}
+    Template for displaying a list of the current devices
+    TODO: Can probably abstract the list part of the template and extend it for
+          each list component in the project
+{% endcomment %}
+
+{% block content %}
+    <div class="row mt-5 gx-0 rounded" style="overflow: hidden;">
+      {% if config_list %}
+          <table id="config_table" class="table">
+              {% comment %} Table headers {% endcomment %}
+              <thead>
+                  <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Temperature Threshold</th>
+                      <th scope="col">Temperature Threshold</th>
+                      <th scope="col">Turbidity Threshold</th>
+                      <th scope="col">Fluorescence Threshold</th>
+                      <th scope="col">{# Actions #}</th>
+                  </tr>
+              </thead>
+
+              {% for config in config_list %}
+              <tr>
+                  {% comment %} If device name is not set, default to hwID {% endcomment %}
+                  {% if config.name %}
+                      <td>{{ config.name }}</td>
+                  {% else %}
+                      <td>{{ config.pk }}</td>
+                  {% endif %}
+                  <td>{{ config.tempThresh }}</td>
+                  <td>{{ config.deltaTempThresh }}</td>
+                  <td>{{ config.deltaTurbThresh }}</td>
+                  <td>{{ config.fluoroThresh }}</td>
+                  <td>
+                      <a href="{% url 'devices:editConf'  config.pk %}"><button class="btn btn-sm btn-outline-primary">Edit</button></a>
+                  </td>
+              </tr>
+              {% endfor %}
+          </table>
+
+          {% comment %} Link to location history page (all devices) {% endcomment %}
+          <h3 class="mb-2 mt-4">New Configuration</h3>
+          <form 
+              action = "{% url 'devices:newConf' %}"   
+              method = "post"
+              class  = "rounded bg-light mb-auto p-3 col-4"
+          >
+              {% csrf_token %}
+
+              <fieldset>
+                  {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+
+                  {% comment %} Friendly name {% endcomment %}
+                  <label for="name" class="form-label">Configuration Name:</label>
+                  <input 
+                      type  = "text"
+                      name  = "name"
+                      value = ""
+                      class = "form-control"
+                  >
+              </fieldset>
+              <button 
+                  class = "btn btn-primary mt-4"
+                  type  = "submit"
+              >
+                  Create Configuration
+              </button>
+          </form>
+      
+      {% else %}
+          <p>No devices are available.</p>
+      {% endif %}
+  </div>
+
+{% endblock %}
