@@ -10,7 +10,7 @@
     {% include "head.html" %}
 
     <body>
-        <div class="container-fluid p-0">
+        <div class="container-fluid p-0" id="page_container">
             <div class="row gx-0">
       
                 {% comment %}
@@ -22,11 +22,11 @@
                     Page content and title
                 {% endcomment %}
                 <div class="col-10">
-                    <div class="container-fluid m-0 pt-4">
+                    <div class="container-fluid m-0 pt-4" id="page_content">
                         <div class="container-fluid ps-3 m-0">
                             {% if page_title %}
                                 <div class="row gx-0 mb-3">
-                                    <p class="text fs-2">{{ page_title|title }}</p>
+                                    <h1 class="text fs-1 mt-1">{{ page_title|title }}</h1>
                                 </div>
                             {% endif %}
                             
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            {% include "footer.html" %}
+            {% comment %} {% include "footer.html" %} {% endcomment %}
         </div>
 
 
