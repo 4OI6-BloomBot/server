@@ -21,6 +21,9 @@ class IndexView(generic.ListView):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
         context['location_json'] = getDeviceLocations()
 
+        # Add the config options
+        context['config_list']  = getConfigs()
+
         # Add the page type for nav
         context['page_category'] = "device"
         context['page_title']    = "devices"
@@ -131,7 +134,24 @@ def editConfig(request, pk):
     return HttpResponseRedirect(reverse("devices:index"))
 
 # ==========================================
-# Apply a new config to a specific device
+# Create a new config object
+# ==========================================
+def newConfig(request):
+
+    config = Config(
+          name            = request.POST['name'],
+          tempThresh      = 0.0,
+          deltaTempThresh = 0.0,
+          deltaTurbThresh = 0.0,
+          fluoroThresh    = 0.0
+        )
+    config.save()
+
+    return HttpResponseRedirect(reverse("devices:index"))
+
+
+# ==========================================
+# Create a new config
 # ==========================================
 def setConfig(request, id):
 
