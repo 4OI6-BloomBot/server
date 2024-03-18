@@ -11,7 +11,10 @@ class ConfigSerializer(serializers.ModelSerializer):
     fields = (
       'id', 
       'name',
-      'temp_thresh'
+      'tempThresh',
+      'deltaTurbThresh',
+      'deltaTempThresh', 
+      'fluoroThresh'
     )
 
     # Do not allow writes through the API
