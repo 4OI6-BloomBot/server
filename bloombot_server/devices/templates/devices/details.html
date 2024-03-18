@@ -6,12 +6,13 @@
 
 {% block content %}
 
-    <div class="row gx-0">
+    <div class="row gx-3">
        
+      <div class="col-7">
         <form 
             action = "{% url 'devices:edit' device.id %}"   
             method = "post"
-            class  = "col-7 rounded bg-light mb-auto p-3"
+            class  = "rounded bg-light mb-auto p-3"
         >
             {% csrf_token %}
 
@@ -46,13 +47,26 @@
                 value = "Save"
             >
         </form>
+      </div>
         
 
         {% comment %} Map showing the location history of the device {% endcomment %}
         {% if location_json %}
-          <div class="col-4 rounded mx-5 shadow-sm" style="height: 350px; overflow: hidden;">
+          <div class="col-5">
+            <div class="rounded shadow-sm pl-3" style="height: 300px; overflow: hidden;">
               {% include "location/map.html" with location_json=location_json %}
+            </div>
           </div>
         {% endif %}
+    </div>
+
+    <div class="row gx-3 pt-5">
+      <div class = "col-6">
+          {% include "devices/config.html" with currConf=device.config staticSet=1 name="currConfig" %}
+      </div>
+
+      <div class = "col-6">
+        {% include "devices/config.html" with configs=configs name="newConf" deviceConfSet=1 device=device %}
+      </div>
     </div>
 {% endblock %}

@@ -45,9 +45,13 @@
                 {% endfor %}
             </table>
 
-            {% comment %} Link to location history page (all devices) {% endcomment %}
-            <a href="{% url 'location:index' %}"><button class="btn btn-primary">All device history</button></a>
-        
+            <p class="d-inline-flex gap-1">
+                {% comment %} Link to location history page (all devices) {% endcomment %}
+                <a href="{% url 'location:index' %}"><button class="btn btn-primary">All device history</button></a>
+                
+                {% comment %} Link to configuration page (all configs) {% endcomment %}
+                <a href="{% url 'devices:confIndex' %}"><button class="btn btn-primary">Configurations</button></a>
+            </p>
         {% else %}
             <p>No devices are available.</p>
         {% endif %}
