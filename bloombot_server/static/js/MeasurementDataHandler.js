@@ -7,12 +7,12 @@ class MeasurementDataHandler {
   // ==============================================
   // Constructor
   // ==============================================
-  constructor(endpoint, callback) {
+  constructor(endpoint, callback,sens_id,sens_name) {
     // ========================================
     // Config params
     // ========================================
     this.endpoint         = endpoint;
-    this.fetch_interval   = 5000;
+    this.fetch_interval   = 10000;
 
     // ========================================
     // Class vars
@@ -21,7 +21,8 @@ class MeasurementDataHandler {
     this.device_datasets  = [];
 
     this.last_received_id = null;
-    this.sensor_id        = null;
+    this.sensor_id        = sens_id;
+    this.sensor_name      = String(sens_name);
 
     // Function to call when there is updated
     // data available
@@ -110,7 +111,7 @@ class MeasurementDataHandler {
     this.device_datasets.push(
       {
         device_id: device.id,
-        label:     device.name,
+        label:     device.name + " " + this.sensor_name+ " Sensor",
         data:      []
       }
     );

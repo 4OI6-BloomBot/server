@@ -10,7 +10,27 @@
 {% block content %}
     {% comment %} TODO: Don't really need to pass any measurement data to this anymore {% endcomment %}
     {% if measurement_list %} 
-        <div style="width: 800px;"><canvas id="sensor_chart"></canvas></div>
+
+
+    <style>
+          .column {
+      float: left;
+      width: 25%;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    </style>
+
+      <div class="row" style="width: 100%;">
+        {% for sensor in sensor_list %}
+        <div class="column"><canvas id="sensor_chart_{{ sensor.name }}"></canvas></div>
+        {% endfor %}
+      </div>
 
         <table id="measurement_table" class="table">
             {% comment %} Table headers {% endcomment %}
@@ -28,12 +48,6 @@
         <p>No measurements are available.</p>
     {% endif %}
 
-    {% if sensor_list %}
-        <button class="btn btn-primary" onclick="setSensorID(null)">All</button>
-        {% for sensor in sensor_list %}
-            <button class="btn btn-primary" onclick="setSensorID({{ sensor.pk }})">{{ sensor.name }}</button>
-        {% endfor %}
-    {% endif %}
 {% endblock %}
 
 {% block js %}
@@ -80,25 +94,28 @@
 
 
         {% comment %} 
+        Create an instance of the measurement data handler class
+        Manages calls to the API and data parsing.
+        {% endcomment %}
+        endpoint = "http://{{ request.get_host }}/api/measurements/"; // TODO: Needs cleanup
+
+        {% comment %} 
           Declare the chart object
         {% endcomment %}
-        chart = new Chart(
-          document.getElementById('sensor_chart'),
+        {% for sensor in sensor_list %}
+          {{ sensor.name }} = new Chart(
+          document.getElementById('sensor_chart_{{ sensor.name }}'),
           {
-              type: 'line',            
+              type: 'line',
+              showLine: false,            
               data: {
                   datasets: []
               }
           }
         );
+        handler_{{ sensor.name }}  = new MeasurementDataHandler(endpoint, new_data_callback,{{ sensor.pk }},"{{ sensor.name }}");
+        {% endfor %}
 
-
-        {% comment %} 
-          Create an instance of the measurement data handler class
-          Manages calls to the API and data parsing.
-        {% endcomment %}
-        endpoint = "http://{{ request.get_host }}/api/measurements/"; // TODO: Needs cleanup
-        handler  = new MeasurementDataHandler(endpoint, new_data_callback);
 
         {% comment %} 
           Callback function that is called when new data is available
@@ -109,9 +126,16 @@
           table.rows.add(d);
           table.draw();
 
+          {% for sensor in sensor_list %}
           // Update chart
-          chart.data.datasets = handler.device_datasets;
-          chart.update();
+          //setSensorID({{ sensor.pk }});
+          {{ sensor.name }}.data.datasets = handler_{{ sensor.name }}.device_datasets;
+          {{ sensor.name }}.clear();
+          {{ sensor.name }}.update();
+          {{ sensor.name }}.clear();
+          {{ sensor.name }}.update();
+          {% endfor %}
+
         }
       
 
