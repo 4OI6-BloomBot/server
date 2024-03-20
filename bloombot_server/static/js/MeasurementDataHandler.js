@@ -57,20 +57,30 @@ class MeasurementDataHandler {
 
         // Skip updates if there is no new data
         if (d.length > 0) {
+          // Update the date string to a date object for each 
+          // entry.
+          d.forEach(self.convertDatetime);
+
           self.parseDeviceData(d);
 
           // Update the last received ID
           // Request data is ordered by received time
           self.last_received_id = d[d.length - 1].id;
-
-          // Trigger the callback function with the new
-          // raw data.
-          self.callback_fn(d);
         }
+
+        // Trigger the callback function with the new
+        // data.
+        self.callback_fn(d);
       }
     });
   }
 
+  // ==============================================
+  // Update the date strings to JS Date objects
+  // ==============================================
+  convertDatetime(item, i, data) {
+    data[i].datetime = new Date(data[i].datetime);
+  }
 
   // ==============================================
   // Find each of the unique devices from the data 
@@ -127,12 +137,10 @@ class MeasurementDataHandler {
   appendMeasurementData(index, data) {
       
     // Iterate over each entry and parse data for chart format
-    // TODO: This needs to be updated to add data in order of time. 
-    //       Otherwise, the chart will go back over itself.
     for (var j = 0; j < data.length; j++) {
       this.device_datasets[index].data.push(
         {
-          x: data[j].datetime, // TODO: Needs to be converted
+          x: data[j].datetime,
           y: data[j].value
         }
       );

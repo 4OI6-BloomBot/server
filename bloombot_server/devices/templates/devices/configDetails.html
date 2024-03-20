@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% comment %}
+    Displays the configuration of a device and its values
+{% endcomment %}
+{% load static %}
+
+{% block content %}    
+  <div class="row gx-3 pt-2">
+    <div class = "col-6">
+      <form 
+          method = "post"
+          class  = "rounded bg-light mb-auto p-3"
+          action = "{% url 'devices:updateConf' config.pk %}"
+      >
+          {% csrf_token %}
+
+          <fieldset>
+              {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+
+              {% comment %} Friendly name {% endcomment %}
+              <label for="configName" class="form-label">Name:</label>
+              <input 
+                  name  = "configName"
+                  class = "form-control"
+                  type  = "text"
+                  value = "{{config.name}}"
+              >
+              </input>
+
+              {% comment %} Configuration params {% endcomment %}
+              <label for="tempThresh" class="form-label mt-3">Temperature Threshold (°C)</label>
+              <input 
+                  name  = "tempThresh"
+                  class = "form-control"
+                  id    = "confTempThresh"
+                  type  = "number"
+                  value = "{{config.tempThresh}}"
+              >
+              </input>
+
+              <label for="deltaTempThresh" class="form-label mt-3">Temperature Delta Threshold (°C)</label>
+              <input 
+                  name  = "deltaTempThresh"
+                  class = "form-control"
+                  id    = "confDeltaTempThresh"
+                  type  = "number"
+                  value = "{{config.deltaTempThresh}}"
+              >
+              </input>
+
+              <label for="deltaTurbThresh" class="form-label mt-3">Turbidity Delta Threshold (???)</label>
+              <input 
+                  name  = "deltaTurbThresh"
+                  class = "form-control"
+                  id    = "confDeltaTurbThresh"
+                  type  = "number"
+                  value = "{{config.deltaTurbThresh}}"
+              >
+              </input>
+
+              <label for="fluoroThresh" class="form-label mt-3">Fluorometer Threshold (??)</label>
+              <input 
+                  name  = "fluoroThresh"
+                  class = "form-control"
+                  id    = "confFluoroThresh"
+                  type  = "number"
+                  value = "{{config.fluoroThresh}}"
+              >
+              </input>
+          </fieldset>
+
+          <input 
+              type  = "submit"
+              class = "btn btn-primary mt-5"
+              value = "Update Configuration"
+          >
+      </form>
+    </div>
+  </div>
+
+  <script>
+
+  </script>
+{% endblock %}

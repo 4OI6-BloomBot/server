@@ -35,7 +35,19 @@ class Measurement(models.Model):
                     "devices.Device",
                     on_delete = models.CASCADE
                   )
-  
+
+  # Reference to a location object that is assosiated
+  # with the measurement.
+  # Do not delete locations on measurement delete.
+  # Does not have to be specified.
+  location      = models.ForeignKey(
+                    "location.Location",
+                    on_delete = models.PROTECT,
+                    blank     = True,
+                    null      = True
+                  )
+
+  # Measurement value.
   value         = models.FloatField()
 
   # Log the time that the measurement was received by the
