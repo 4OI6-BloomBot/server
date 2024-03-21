@@ -1,0 +1,29 @@
+[
+  {
+    "model": "sensor_data.Sensor",
+    "pk": 1,
+    "fields": {
+      "name"      : "Temperature",
+      "unit"      : "°C",
+      "precision" : "0.5"
+    }
+  },
+  {
+    "model": "sensor_data.Sensor",
+    "pk": 2,
+    "fields": {
+      "name"      : "Turbidity",
+      "unit"      : "NTU",
+      "precision" : "0.5"
+    }
+  },
+  {
+    "model": "sensor_data.Sensor",
+    "pk": 3,
+    "fields": {
+      "name"      : "Fluorescence",
+      "unit"      : "RFU",
+      "precision" : "0.5"
+    }
+  }
+]
