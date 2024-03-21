@@ -18,4 +18,4 @@ class ConfigSerializer(serializers.ModelSerializer):
     )
 
     # Do not allow writes through the API
-    read_only_fields = ['name', 'temp_thresh']
+    read_only_fields = ['name', 'tempThresh']
