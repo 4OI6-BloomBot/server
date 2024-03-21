@@ -20,4 +20,7 @@ echo '[INFO] Done!'
 echo '[INFO] Collecting static files'
 python manage.py collectstatic --no-input
 
+echo '[INFO] Loading sensor fixture'
+python manage.py loaddata sensors
+
 exec "$@"
