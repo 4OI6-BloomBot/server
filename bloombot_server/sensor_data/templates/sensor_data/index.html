@@ -10,45 +10,39 @@
 {% endcomment %}
 
 {% block content %}
-    {% comment %} TODO: Don't really need to pass any measurement data to this anymore {% endcomment %}
-    {% if measurement_list %} 
-
 
     <style>
-          .column {
-      float: left;
-      width: 25%;
-    }
+      .column {
+        float: left;
+        width: 25%;
+      }
 
-    /* Clear floats after the columns */
-    .row:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear:   both;
+      }
     </style>
 
-      <div class="row" style="width: 100%;">
-        {% for sensor in sensor_list %}
-        <div class="column"><canvas id="sensor_chart_{{ sensor.name }}"></canvas></div>
-        {% endfor %}
-      </div>
+    <div class="row" style="width: 100%;">
+      {% for sensor in sensor_list %}
+      <div class="column"><canvas id="sensor_chart_{{ sensor.name }}"></canvas></div>
+      {% endfor %}
+    </div>
 
-        <table id="measurement_table" class="table">
-            {% comment %} Table headers {% endcomment %}
-            <thead>
-                <tr>
-                    <th scope="col">Device</th>
-                    <th scope="col">Sensor Type</th>
-                    <th scope="col">Value</th>
-                    <th scope="col">Unit</th>
-                    <th scope="col">Timestamp</th>
-                </tr>
-            </thead>
-        </table>
-    {% else %}
-        <p>No measurements are available.</p>
-    {% endif %}
+    <table id="measurement_table" class="table">
+        {% comment %} Table headers {% endcomment %}
+        <thead>
+            <tr>
+                <th scope="col">Device</th>
+                <th scope="col">Sensor Type</th>
+                <th scope="col">Value</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Timestamp</th>
+            </tr>
+        </thead>
+    </table>
 
 {% endblock %}
 
