@@ -1,8 +1,9 @@
 from rest_framework                      import viewsets, mixins, generics
-from .models                             import Measurement, Location, Device
+from .models                             import Measurement, Location, Device, Deposit
 from .serializers.measurement_serializer import MeasurementSerializer
 from .serializers.location_serializer    import LocationSerializer
 from .serializers.config_serializer      import ConfigSerializer
+from .serializers.deposit_serializer     import DepositSerializer
 from django.utils                        import timezone
 from django.shortcuts                    import get_object_or_404
 from datetime                            import timedelta
@@ -71,6 +72,41 @@ class MeasurementViewset(BaseViewset):
 
         return queryset.order_by("time_received")
     
+
+# ======================================================
+# Sensor data view set.
+# Handles API access to the sensor data model. 
+# ======================================================
+class DepositViewset(BaseViewset):
+    # Define queryset & serializer
+    queryset         = Deposit.objects.all()
+    serializer_class = DepositSerializer
+
+    # ============================================
+    # Update the queryset with filters applied
+    # ============================================
+    def get_queryset(self):
+        queryset = Deposit.objects.all()
+        queryset = self.filterDevice(queryset)
+
+        # Grab the parameters from the HTTP request
+        last_recieved_id = self.request.query_params.get('last_received')
+
+
+        # Only return values that were added since the last_recieve_time
+        # Set the start time to be slightly past the given recieve time to avoid duplication
+        if (last_recieved_id):
+            
+            # Get the object from the passed ID
+            last_recieved_obj = Deposit.objects.get(id = last_recieved_id)
+
+            # If the obj exists, filter the data based off of its creation time
+            if (last_recieved_obj):
+                start_time = last_recieved_obj.time_received + timedelta(seconds = 1)
+                queryset   = queryset.filter(time_received__range = [start_time, timezone.now()])
+
+
+        return queryset.order_by("time_received")
 
   
 # ======================================================
