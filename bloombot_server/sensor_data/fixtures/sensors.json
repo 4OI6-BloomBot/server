@@ -1,6 +1,15 @@
 [
   {
     "model": "sensor_data.Sensor",
+    "pk": 0,
+    "fields": {
+      "name"      : "Pump",
+      "unit"      : "ms",
+      "precision" : "1"
+    }
+  },
+  {
+    "model": "sensor_data.Sensor",
     "pk": 1,
     "fields": {
       "name"      : "Temperature",
