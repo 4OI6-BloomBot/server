@@ -125,6 +125,7 @@ def editConfig(request, pk):
     config.name            = request.POST['configName']
     config.tempThresh      = request.POST['tempThresh']
     config.deltaTempThresh = request.POST['deltaTempThresh']
+    config.turbThresh      = request.POST['turbThresh']
     config.deltaTurbThresh = request.POST['deltaTurbThresh']
     config.fluoroThresh    = request.POST['fluoroThresh']
 
@@ -142,6 +143,7 @@ def newConfig(request):
           name            = request.POST['name'],
           tempThresh      = 0.0,
           deltaTempThresh = 0.0,
+          turbThresh      = 0.0,
           deltaTurbThresh = 0.0,
           fluoroThresh    = 0.0
         )

@@ -35,6 +35,7 @@
                   class = "form-control"
                   id    = "confTempThresh"
                   type  = "number"
+                  step  = "any"
                   value = "{{config.tempThresh}}"
               >
               </input>
@@ -45,7 +46,19 @@
                   class = "form-control"
                   id    = "confDeltaTempThresh"
                   type  = "number"
+                  step  = "any"
                   value = "{{config.deltaTempThresh}}"
+              >
+              </input>
+
+              <label for="turbThresh" class="form-label mt-3">Turbidity Threshold (???)</label>
+              <input 
+                  name  = "turbThresh"
+                  class = "form-control"
+                  id    = "confTurbThresh"
+                  type  = "number"
+                  step  = "any"
+                  value = "{{config.turbThresh}}"
               >
               </input>
 
@@ -55,6 +68,7 @@
                   class = "form-control"
                   id    = "confDeltaTurbThresh"
                   type  = "number"
+                  step  = "any"
                   value = "{{config.deltaTurbThresh}}"
               >
               </input>
@@ -65,6 +79,7 @@
                   class = "form-control"
                   id    = "confFluoroThresh"
                   type  = "number"
+                  step  = "any"
                   value = "{{config.fluoroThresh}}"
               >
               </input>
