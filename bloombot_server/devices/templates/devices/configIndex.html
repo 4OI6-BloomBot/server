@@ -15,8 +15,9 @@
                   <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Temperature Threshold</th>
-                      <th scope="col">Temperature Threshold</th>
+                      <th scope="col">Temperature Delta Threshold</th>
                       <th scope="col">Turbidity Threshold</th>
+                      <th scope="col">Turbidity Delta Threshold</th>
                       <th scope="col">Fluorescence Threshold</th>
                       <th scope="col">{# Actions #}</th>
                   </tr>
@@ -32,6 +33,7 @@
                   {% endif %}
                   <td>{{ config.tempThresh }}</td>
                   <td>{{ config.deltaTempThresh }}</td>
+                  <td>{{ config.turbThresh }}</td>
                   <td>{{ config.deltaTurbThresh }}</td>
                   <td>{{ config.fluoroThresh }}</td>
                   <td>
