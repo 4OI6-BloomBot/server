@@ -12,10 +12,16 @@ class ConfigSerializer(serializers.ModelSerializer):
       'id', 
       'name',
       'tempThresh',
-      'deltaTurbThresh',
       'deltaTempThresh', 
+      'turbThresh',
+      'deltaTurbThresh',
       'fluoroThresh'
     )
 
     # Do not allow writes through the API
-    read_only_fields = ['name', 'tempThresh']
+    read_only_fields = ['name', 
+                        'tempThresh',
+                        'deltaTempThresh',
+                        'turbThresh',
+                        'deltaTurbThresh',  
+                        'fluoroThresh']

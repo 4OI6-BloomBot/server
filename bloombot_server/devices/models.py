@@ -14,8 +14,9 @@ class Config(models.Model):
   
   # Detection thresholds
   tempThresh      = models.FloatField()
-  deltaTurbThresh = models.FloatField()
   deltaTempThresh = models.FloatField()
+  turbThresh      = models.FloatField()
+  deltaTurbThresh = models.FloatField()
   fluoroThresh    = models.FloatField()
 
 
@@ -29,9 +30,10 @@ class Config(models.Model):
         name     = "Default",
         defaults = {
           "tempThresh"      : 25.0,
-          "deltaTurbThresh" : 0.0,
-          "deltaTempThresh" : 0.5,
-          "fluoroThresh"    : 3
+          "deltaTempThresh" : 0.0,
+          "turbThresh"      : 3.5,
+          "deltaTurbThresh" : 0.3,
+          "fluoroThresh"    : 0
         }
      )
 
