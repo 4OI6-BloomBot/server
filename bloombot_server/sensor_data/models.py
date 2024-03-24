@@ -75,8 +75,8 @@ class Deposit(Measurement):
     sensor, created = Sensor.objects.get_or_create(
       name     = "Pump",
       defaults = {
-        "unit"      : "mL",
-        "precision" : 0.5
+        "unit"      : "ms",
+        "precision" : 1.0
       }
     )
 
