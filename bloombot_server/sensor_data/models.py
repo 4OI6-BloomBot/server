@@ -60,3 +60,24 @@ class Measurement(models.Model):
   def __str__(self):
     return str(self.device) + "_" + self.sensor.name
   
+
+# =============================
+# Deposit log model
+# =============================
+class Deposit(Measurement):
+  
+  # =====================================================
+  # Get the pump from the database or create it if
+  # it does not already exist.
+  # =====================================================
+  @classmethod
+  def getPump(cls):
+    sensor, created = Sensor.objects.get_or_create(
+      name     = "Pump",
+      defaults = {
+        "unit"      : "mL",
+        "precision" : 0.5
+      }
+    )
+
+    return sensor
