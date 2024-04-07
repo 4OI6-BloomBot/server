@@ -44,6 +44,27 @@ services:
     depends_on:
       - bb_server
 
+
+  # ================================
+  # Tileserver
+  # ================================
+  osm:
+    image:   overv/openstreetmap-tile-server:latest
+    restart: always
+    ports:
+      - 8081:80
+    # environment:
+    #   - DOWNLOAD_PBF=https://download.geofabrik.de/north-america/canada/ontario-latest.osm.pbf
+    volumes:
+      - osm_data:/data/database/
+      - osm_tiles:/data/tiles/
+      - /ontario.osm.pbf:/data/region.osm.pbf
+
+    
+    
+
 volumes:
   postgres_data:
   bb_static_data:
+  osm_data:
+  osm_tiles:
