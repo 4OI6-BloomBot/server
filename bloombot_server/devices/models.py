@@ -13,11 +13,12 @@ class Config(models.Model):
         )
   
   # Detection thresholds
-  tempThresh      = models.FloatField()
-  deltaTempThresh = models.FloatField()
-  turbThresh      = models.FloatField()
-  deltaTurbThresh = models.FloatField()
-  fluoroThresh    = models.FloatField()
+  tempThresh        = models.FloatField()
+  deltaTempThresh   = models.FloatField()
+  turbThresh        = models.FloatField()
+  deltaTurbThresh   = models.FloatField()
+  fluoroThresh      = models.FloatField()
+  deltaFluoroThresh = models.FloatField()
 
 
   # =====================================================
@@ -29,11 +30,12 @@ class Config(models.Model):
      config, created = cls.objects.get_or_create(
         name     = "Default",
         defaults = {
-          "tempThresh"      : 25.0,
-          "deltaTempThresh" : 0.0,
-          "turbThresh"      : 3.5,
-          "deltaTurbThresh" : 0.3,
-          "fluoroThresh"    : 0
+          "tempThresh"        : 25.0,
+          "deltaTempThresh"   : 0.0,
+          "turbThresh"        : 3.5,
+          "deltaTurbThresh"   : 0.3,
+          "fluoroThresh"      : 0,
+          "deltaFluoroThresh" : 0
         }
      )
 
