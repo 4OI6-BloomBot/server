@@ -130,6 +130,12 @@ def editConfig(request, pk):
     config.fluoroThresh      = request.POST['fluoroThresh']
     config.deltaFluoroThresh = request.POST['deltaFluoroThresh']
 
+    if ("skipDetection" in request.POST.keys()):
+      config.skipDetection = True
+    else:
+      config.skipDetection = False
+      
+
     # Update object in DB
     config.save()
 
@@ -147,7 +153,8 @@ def newConfig(request):
           turbThresh        = 0.0,
           deltaTurbThresh   = 0.0,
           fluoroThresh      = 0.0,
-          deltaFluoroThresh = 0.0
+          deltaFluoroThresh = 0.0,
+          skipDetection     = False
         )
     config.save()
 
