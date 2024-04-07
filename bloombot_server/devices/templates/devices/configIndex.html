@@ -19,6 +19,7 @@
                       <th scope="col">Turbidity Threshold</th>
                       <th scope="col">Turbidity Delta Threshold</th>
                       <th scope="col">Fluorescence Threshold</th>
+                      <th scope="col">Delta Fluorescence Threshold</th>
                       <th scope="col">{# Actions #}</th>
                   </tr>
               </thead>
@@ -36,6 +37,7 @@
                   <td>{{ config.turbThresh }}</td>
                   <td>{{ config.deltaTurbThresh }}</td>
                   <td>{{ config.fluoroThresh }}</td>
+                  <td>{{ config.deltaFluoroThresh }}</td>
                   <td>
                       <a href="{% url 'devices:editConf'  config.pk %}"><button class="btn btn-sm btn-outline-primary">Edit</button></a>
                   </td>
