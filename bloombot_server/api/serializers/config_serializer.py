@@ -16,7 +16,8 @@ class ConfigSerializer(serializers.ModelSerializer):
       'turbThresh',
       'deltaTurbThresh',
       'fluoroThresh',
-      'deltaFluoroThresh'
+      'deltaFluoroThresh',
+      'skipDetection'
     )
 
     # Do not allow writes through the API
@@ -26,4 +27,5 @@ class ConfigSerializer(serializers.ModelSerializer):
                         'turbThresh',
                         'deltaTurbThresh',  
                         'fluoroThresh',
-                        'deltaFluoroThresh']
+                        'deltaFluoroThresh',
+                        'skipDetection']
