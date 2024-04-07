@@ -94,6 +94,21 @@
                   value = "{{config.deltaFluoroThresh}}"
               >
               </input>
+
+              <div class = "form-check mt-3">
+                <label for="skipDetection" class="form-check-label">Bypass Detection</label>
+                <input 
+                    name  = "skipDetection"
+                    class = "form-check-input"
+                    id    = "skipDetection"
+                    type  = "checkbox"
+
+                    {% if config.skipDetection %}
+                      checked = "checked"
+                    {% endif %}
+                >
+                </input>
+              </div>
           </fieldset>
 
           <input 
