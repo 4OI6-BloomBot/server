@@ -19,6 +19,7 @@ class Config(models.Model):
   deltaTurbThresh   = models.FloatField()
   fluoroThresh      = models.FloatField()
   deltaFluoroThresh = models.FloatField()
+  skipDetection     = models.BooleanField()
 
 
   # =====================================================
@@ -35,7 +36,8 @@ class Config(models.Model):
           "turbThresh"        : 3.5,
           "deltaTurbThresh"   : 0.3,
           "fluoroThresh"      : 0,
-          "deltaFluoroThresh" : 0
+          "deltaFluoroThresh" : 0,
+          "skipDetection"     : False
         }
      )
 
