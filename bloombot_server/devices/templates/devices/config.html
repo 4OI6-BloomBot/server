@@ -142,6 +142,25 @@
                     <option value="{{ config.pk }}">{{ config.fluoroThresh }}</option>
                 {% endfor %}
             </select>
+
+            <label for="{{name}}deltaFluoroThresh" class="form-label mt-3">Delta Fluorometer Threshold (??)</label>
+            <select 
+                name  = "{{name}}deltaFluoroThresh"
+                class = "form-select"
+                id    = "{{name}}confDeltaFluoroThresh"
+
+                {% if staticSet or readOnly %}
+                  readonly
+                  disabled
+                {% endif %}
+            >
+                {% if staticSet %}
+                    <option value="{{ currConf.pk }}">{{currConf.deltaFluoroThresh}}</option>
+                {% endif %}
+                {% for config in configs %}
+                    <option value="{{ config.pk }}">{{ config.deltaFluoroThresh }}</option>
+                {% endfor %}
+            </select>
         </fieldset>
 
         {% comment %} Submit button {% endcomment %}
@@ -158,18 +177,20 @@
     <script>
       $(document).ready(function(){
   
-        var config          = $("#{{name}}confSelect");
-        var tempThresh      = $("#{{name}}confTempThresh");
-        var deltaTempThresh = $("#{{name}}confDeltaTempThresh");
-        var turbThresh      = $("#{{name}}confTurbThresh");
-        var deltaTurbThresh = $("#{{name}}confDeltaTurbThresh");
-        var fluoroThresh    = $("#{{name}}confFluoroThresh");
+        var config            = $("#{{name}}confSelect");
+        var tempThresh        = $("#{{name}}confTempThresh");
+        var deltaTempThresh   = $("#{{name}}confDeltaTempThresh");
+        var turbThresh        = $("#{{name}}confTurbThresh");
+        var deltaTurbThresh   = $("#{{name}}confDeltaTurbThresh");
+        var fluoroThresh      = $("#{{name}}confFluoroThresh");
+        var deltaFluoroThresh = $("#{{name}}confDeltaFluoroThresh");
 
-        var $tempThreshOptions      = tempThresh.find('option');
-        var $deltaTempThreshOptions = deltaTempThresh.find('option');
-        var $turbThreshOptions      = turbThresh.find('option');
-        var $deltaTurbThreshOptions = deltaTurbThresh.find('option');
-        var $fluoroThreshOptions    = fluoroThresh.find('option');
+        var $tempThreshOptions        = tempThresh.find('option');
+        var $deltaTempThreshOptions   = deltaTempThresh.find('option');
+        var $turbThreshOptions        = turbThresh.find('option');
+        var $deltaTurbThreshOptions   = deltaTurbThresh.find('option');
+        var $fluoroThreshOptions      = fluoroThresh.find('option');
+        var $deltaFluoroThreshOptions = deltaFluoroThresh.find('option');
 
         config.on('change',function(){
           var valStr = '[value="'+ this.value  +'"]';
@@ -179,6 +200,7 @@
           turbThresh.html($turbThreshOptions.filter(valStr));
           deltaTurbThresh.html($deltaTurbThreshOptions.filter(valStr));
           fluoroThresh.html($fluoroThreshOptions.filter(valStr));
+          deltaFluoroThresh.html($deltaFluoroThreshOptions.filter(valStr));
         }).trigger('change'); 
         
         

@@ -122,12 +122,13 @@ def editConfig(request, pk):
     config = get_object_or_404(Config, pk = pk)
 
     # Get form data
-    config.name            = request.POST['configName']
-    config.tempThresh      = request.POST['tempThresh']
-    config.deltaTempThresh = request.POST['deltaTempThresh']
-    config.turbThresh      = request.POST['turbThresh']
-    config.deltaTurbThresh = request.POST['deltaTurbThresh']
-    config.fluoroThresh    = request.POST['fluoroThresh']
+    config.name              = request.POST['configName']
+    config.tempThresh        = request.POST['tempThresh']
+    config.deltaTempThresh   = request.POST['deltaTempThresh']
+    config.turbThresh        = request.POST['turbThresh']
+    config.deltaTurbThresh   = request.POST['deltaTurbThresh']
+    config.fluoroThresh      = request.POST['fluoroThresh']
+    config.deltaFluoroThresh = request.POST['deltaFluoroThresh']
 
     # Update object in DB
     config.save()
@@ -140,12 +141,13 @@ def editConfig(request, pk):
 def newConfig(request):
 
     config = Config(
-          name            = request.POST['name'],
-          tempThresh      = 0.0,
-          deltaTempThresh = 0.0,
-          turbThresh      = 0.0,
-          deltaTurbThresh = 0.0,
-          fluoroThresh    = 0.0
+          name              = request.POST['name'],
+          tempThresh        = 0.0,
+          deltaTempThresh   = 0.0,
+          turbThresh        = 0.0,
+          deltaTurbThresh   = 0.0,
+          fluoroThresh      = 0.0,
+          deltaFluoroThresh = 0.0
         )
     config.save()
 
