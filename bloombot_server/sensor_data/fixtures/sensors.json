@@ -22,7 +22,7 @@
     "pk": 2,
     "fields": {
       "name"      : "Turbidity",
-      "unit"      : "NTU",
+      "unit"      : "V",
       "precision" : "0.5"
     }
   },
@@ -31,7 +31,7 @@
     "pk": 3,
     "fields": {
       "name"      : "Fluorescence",
-      "unit"      : "RFU",
+      "unit"      : "Counts",
       "precision" : "0.5"
     }
   }
