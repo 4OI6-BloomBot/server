@@ -111,7 +111,12 @@
           {{ sensor.name }} = new Chart(
           document.getElementById('sensor_chart_{{ sensor.name }}'),
           {
+            {% if sensor.name == "Pump" %}
+              type: 'scatter',
+            {% else %}  
               type: 'line',
+            {% endif %}
+
               showLine: false,            
               data: {
                   datasets: []
