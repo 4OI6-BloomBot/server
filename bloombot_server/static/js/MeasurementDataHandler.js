@@ -120,9 +120,11 @@ class MeasurementDataHandler {
     // Create a new object for the device data
     this.device_datasets.push(
       {
-        device_id: device.id,
-        label:     device.name + " " + this.sensor_name+ " Sensor",
-        data:      []
+        device_id:    device.id,
+        label:        device.name + " " + this.sensor_name+ " Sensor",
+        data:         [],
+        borderColor: 'rgb(61, 137, 48)',
+        tension:      0.2,
       }
     );
 
