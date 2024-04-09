@@ -10,6 +10,10 @@ body {
     background-color: #343a40;
 }
 
+.nav-pills .active { 
+  background-color: rgb(61, 137, 48)!important;
+}
+
 #page_container {
   height:   100vh;
   overflow: hidden;
