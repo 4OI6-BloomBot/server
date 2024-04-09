@@ -16,11 +16,11 @@
 
             {% comment %} Navbar pill links {% endcomment %}
             <ul class="nav nav-pills flex-column mb-auto">
-                <li>
+                {% comment %} <li>
                     <a href="#" class="nav-link text-white">
                         <i class="bi me-2 bi-speedometer2"></i> Dashboard
                     </a>
-                </li>
+                </li> {% endcomment %}
                 <li>
                     <a href="{% url 'devices:index' %}" class="nav-link mt-1 text-white {% if page_category == 'device' %}active{% endif %}">
                         <i class="bi me-2 bi-cursor"></i> Devices
@@ -30,6 +30,11 @@
                     <a href="{% url 'sensor_data:index' %}" class="nav-link mt-1 text-white {% if page_category == 'sensor_data' %}active{% endif %}">
                         <i class="bi me-2 bi-clipboard-data"></i> Sensor Data
                     </a>
+                </li>
+                <li>
+                  <a href="{% url 'location:index' %}" class="nav-link text-white">
+                      <i class="bi me-2 bi-globe-americas"></i> Location
+                  </a>
                 </li>
             </ul>
         </div>

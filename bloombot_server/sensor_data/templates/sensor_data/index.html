@@ -12,9 +12,15 @@
 {% block content %}
 
     <style>
+
+      .chart {
+        padding: 10px;
+        margin-bottom:10px;
+      }
+
       .column {
         float: left;
-        width: 25%;
+        width: 50%;
       }
 
       /* Clear floats after the columns */
@@ -25,9 +31,9 @@
       }
     </style>
 
-    <div class="row" style="width: 100%;">
+    <div class="row mb-5" style="width: 100%; margin-bottom:10px;">
       {% for sensor in sensor_list %}
-      <div class="column"><canvas id="sensor_chart_{{ sensor.name }}"></canvas></div>
+      <div class="column"><canvas class="chart rounded bg-light shadow-sm" id="sensor_chart_{{ sensor.name }}"></canvas></div>
       {% endfor %}
     </div>
 
@@ -111,7 +117,12 @@
           {{ sensor.name }} = new Chart(
           document.getElementById('sensor_chart_{{ sensor.name }}'),
           {
+            {% if sensor.name == "Pump" %}
+              type: 'scatter',
+            {% else %}  
               type: 'line',
+            {% endif %}
+
               showLine: false,            
               data: {
                   datasets: []
@@ -125,6 +136,21 @@
                                   day:    "MMM D",
                                   minute: "MMM D m"
                               }
+                          }
+                      },
+                      y: {
+                          title: {
+                              text:    "{{ sensor.unit }}",
+                              display: true,
+                            }
+                      }
+                  },
+                  plugins: {
+                      title: {
+                          display: true,
+                          text: '{{ sensor.name }}',
+                          font: {
+                            size: 18,
                           }
                       }
                   }
